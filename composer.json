@@ -1,0 +1,24 @@
+{
+    "name": "coopcycle/db-shenker",
+    "authors": [
+        {
+            "name": "Antoine Bagnaud",
+            "email": "contact@antoinebagnaud.me"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "DBShenker\\": "src"
+        }
+    },
+    "require": {
+        "sabas/edifact": "^0.6.1",
+        "php-edifact/edifact-mapping": "dev-master",
+        "ext-curl": "*"
+    },
+    "repositories": [{
+        "type": "vcs",
+        "url": "https://github.com/coopcycle/edifact-mapping"
+    }],
+    "minimum-stability": "dev"
+}
