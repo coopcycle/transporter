@@ -3,7 +3,7 @@
 namespace DBShenker\DTO;
 
 use DateTime;
-use DBShenker\Enums\DateEventType;
+use DBShenker\Enum\DateEventType;
 
 final class Date
 {

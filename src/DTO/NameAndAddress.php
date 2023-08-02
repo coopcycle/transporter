@@ -2,8 +2,11 @@
 
 namespace DBShenker\DTO;
 
+use DBShenker\Enum\NameAndAddressType;
+
 final class NameAndAddress
 {
+    private NameAndAddressType $type;
     private ?string $contactName = null;
     private ?string $contactSiret = null;
     private ?string $address = null;
@@ -11,6 +14,24 @@ final class NameAndAddress
     private ?float $longitude = null;
 
     private array $communicationMeans = [];
+
+    /**
+     * @return NameAndAddressType
+     */
+    public function getType(): NameAndAddressType
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param NameAndAddressType $type
+     * @return NameAndAddress
+     */
+    public function setType(NameAndAddressType $type): NameAndAddress
+    {
+        $this->type = $type;
+        return $this;
+    }
 
     /**
      * @return string|null

@@ -2,7 +2,7 @@
 
 namespace DBShenker\DTO;
 
-use DBShenker\Enums\CommunicationMeanType;
+use DBShenker\Enum\CommunicationMeanType;
 
 class CommunicationMean
 {

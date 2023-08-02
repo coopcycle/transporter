@@ -1,6 +1,6 @@
 <?php
 
-namespace DBShenker\Enums;
+namespace DBShenker\Enum;
 enum ProductType: int
 {
     // 21

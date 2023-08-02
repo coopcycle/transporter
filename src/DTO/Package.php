@@ -2,7 +2,7 @@
 
 namespace DBShenker\DTO;
 
-use DBShenker\Enums\ProductType;
+use DBShenker\Enum\ProductType;
 
 class Package
 {

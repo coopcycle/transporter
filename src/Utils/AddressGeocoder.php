@@ -1,6 +1,6 @@
 <?php
 
-namespace DBShenker;
+namespace DBShenker\Utils;
 
 interface AddressGeocoder
 {

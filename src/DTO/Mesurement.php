@@ -2,8 +2,8 @@
 
 namespace DBShenker\DTO;
 
-use DBShenker\Enums\QuantityType;
-use DBShenker\Enums\QuantityUnitType;
+use DBShenker\Enum\QuantityType;
+use DBShenker\Enum\QuantityUnitType;
 
 class Mesurement
 {
