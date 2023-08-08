@@ -128,7 +128,7 @@ class DBShenkerScontrParser implements DBShenkerParserInterface
             //print_r(array_merge([], ...array_values(array_slice($nad['nameAndAddress'], 4))));
             //TODO: Enjoy the ugly hack
             $address = [];
-            $data = array_values(array_slice($nad['nameAndAddress'], 4));
+            $data = array_values(array_slice($nad['nameAndAddress'], 5));
             array_walk_recursive($data, function ($v) use (&$address) {
                 $address[] = trim($v);
             });
@@ -146,10 +146,14 @@ class DBShenkerScontrParser implements DBShenkerParserInterface
 
             // Parse communication means
             if (isset($nad['communicationMeans'])) {
-                $nad->setContactName(
-                    trim(join(' ', $nad['communicationMeans']['contact']))
+                $ret->setContactName(
+                    match (gettype($nad['communicationMeans']['contact'])) {
+                        'array' => trim(join(' ', $nad['communicationMeans']['contact'])),
+                        'string' => trim($nad['communicationMeans']['contact']),
+                        'NULL' => null
+                    }
                 );
-                $nad->setCommunicationMeans(self::getCommunicationMeans($nad['communicationMeans']));
+                $ret->setCommunicationMeans(self::getCommunicationMeans($nad['communicationMeans']));
             }
             $acc[] = $ret;
             return $acc;
@@ -181,7 +185,7 @@ class DBShenkerScontrParser implements DBShenkerParserInterface
 
     private static function getCommunicationMeans(array $contactMeans): array {
         return array_values(array_filter(array_map(function ($contact) {
-            if ($this->isPhone($contact)) {
+            if (self::isPhone($contact)) {
                 $contact = str_replace(['.', ' ', '-', '_', '/'], '', $contact);
                 return new CommunicationMean(CommunicationMeanType::PHONE, $contact);
             }
@@ -192,11 +196,11 @@ class DBShenkerScontrParser implements DBShenkerParserInterface
 
             return null;
         }, array_map(function($v) { return $v[0]; },
-            array_slice($contactMeans, 4)))));
+            array_slice($contactMeans, 5)))));
     }
 
 
-    private function isPhone(string $phone): bool
+    private static function isPhone(string $phone): bool
     {
         return preg_match('/^\d{2}.?\d{2}.?\d{2}.?\d{2}.?\d{2}$/', $phone) === 1;
     }
