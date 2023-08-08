@@ -125,29 +125,31 @@ class DBShenkerScontrParser implements DBShenkerParserInterface
             $ret->setType(NameAndAddressType::from($nad['nameAndAddress']['quality']));
 
 
+            //print_r(array_merge([], ...array_values(array_slice($nad['nameAndAddress'], 4))));
             //TODO: Enjoy the ugly hack
-            $address = trim(
-                str_replace('Array', '', join("\n",
-                    array_values(array_slice($nad['nameAndAddress'], 5))
-                ))
-            );
+            $address = [];
+            $data = array_values(array_slice($nad['nameAndAddress'], 4));
+            array_walk_recursive($data, function ($v) use (&$address) {
+                $address[] = trim($v);
+            });
+            $address = join(" ", array_filter($address));
             // Set address
             $ret->setAddress($address);
 
             // Apply geocode if needed
             if ($geocode instanceof AddressGeocoder) {
-                $res = $this->addressGeocoder->geocode($nad->getAddress());
+                $res = $geocode->geocode($ret->getAddress());
                 if ($res) {
-                    $nad->setLatitude($res['latitude'])->setLongitude($res['longitude']);
+                    $ret->setLatitude($res['latitude'])->setLongitude($res['longitude']);
                 }
             }
 
             // Parse communication means
-            if (isset($v['communicationMeans'])) {
+            if (isset($nad['communicationMeans'])) {
                 $nad->setContactName(
-                    trim(join(' ', $v['communicationMeans']['contact']))
+                    trim(join(' ', $nad['communicationMeans']['contact']))
                 );
-                $nad->setCommunicationMeans(self::getCommunicationMeans($v['communicationMeans']));
+                $nad->setCommunicationMeans(self::getCommunicationMeans($nad['communicationMeans']));
             }
             $acc[] = $ret;
             return $acc;
