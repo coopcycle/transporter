@@ -2,6 +2,8 @@
 
 namespace DBShenker\DTO;
 
+use DBShenker\Enum\NameAndAddressType;
+
 class GR7
 {
 
@@ -57,8 +59,13 @@ class GR7
     /**
      * @return array
      */
-    public function getNamesAndAddresses(): array
+    public function getNamesAndAddresses(?NameAndAddressType $type = null): array
     {
+
+        if (!is_null($type)) {
+            return array_filter($this->namesAndAddresses, fn($nameAndAddress) => $nameAndAddress->getType() === $type);
+        }
+
         return $this->namesAndAddresses;
     }
 

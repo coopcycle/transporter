@@ -72,7 +72,7 @@ class DBShenkerScontrParser implements DBShenkerParserInterface
      * Parse GID segment
      *
      * @param array $message
-     * @return array
+     * @return Package[]
      */
     private static function getPackages(array $message): array
     {
@@ -94,7 +94,7 @@ class DBShenkerScontrParser implements DBShenkerParserInterface
      * Parse MSE segment
      *
      * @param array $message
-     * @return array
+     * @return Mesurement[]
      */
     private static function getMesurements(array $message): array
     {
@@ -114,7 +114,7 @@ class DBShenkerScontrParser implements DBShenkerParserInterface
      *
      * @param array $message
      * @param AddressGeocoder|null $geocode
-     * @return array
+     * @return NameAndAddress[]
      */
     private static function getNamesAndAddresses(array $message, ?AddressGeocoder $geocode = null): array
     {
@@ -160,6 +160,10 @@ class DBShenkerScontrParser implements DBShenkerParserInterface
         }, []);
     }
 
+    /**
+     * @param array $message
+     * @return Date[]
+     */
     private static function getDates(array $message): array
     {
 
@@ -174,15 +178,26 @@ class DBShenkerScontrParser implements DBShenkerParserInterface
         }, []);
     }
 
+    /**
+     * @param $message
+     * @return string|null
+     */
     private static function getComments($message): ?string
     {
-        if (!isset($message['text'])) {
+        if (
+            !isset($message['text'])
+            || !isset($message['text']['text'])
+        ) {
             return null;
         }
         //TODO: Handle multiple comments
         return $message['text']['text'];
     }
 
+    /**
+     * @param array $contactMeans
+     * @return CommunicationMean[]
+     */
     private static function getCommunicationMeans(array $contactMeans): array {
         return array_values(array_filter(array_map(function ($contact) {
             if (self::isPhone($contact)) {
@@ -199,7 +214,10 @@ class DBShenkerScontrParser implements DBShenkerParserInterface
             array_slice($contactMeans, 5)))));
     }
 
-
+    /**
+     * @param string $phone
+     * @return bool
+     */
     private static function isPhone(string $phone): bool
     {
         return preg_match('/^\d{2}.?\d{2}.?\d{2}.?\d{2}.?\d{2}$/', $phone) === 1;

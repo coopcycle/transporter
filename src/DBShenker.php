@@ -18,10 +18,10 @@ class DBShenker
      *
      * @param string $inovert
      * @param INOVERTMessageType $messageType
-     * @return DBShenkerParserInterface
+     * @return DBShenkerParserInterface[]
      * @throws DBShenkerException
      */
-    public static function parse(string $inovert, INOVERTMessageType $messageType = INOVERTMessageType::SCONTR): DBShenkerParserInterface
+    public static function parse(string $inovert, INOVERTMessageType $messageType = INOVERTMessageType::SCONTR): array
     {
         $parser = new Parser($inovert);
         $parsed = $parser->get();
@@ -43,16 +43,14 @@ class DBShenker
             throw new DBShenkerException('No messages found');
         }
 
-        if (count($prep) > 1) {
-            throw new DBShenkerException('Too many messages, not yet implemented');
-        }
-
-        $DBParser = match ($messageType) {
-            INOVERTMessageType::SCONTR => new DBShenkerScontrParser(),
-            default => throw new DBShenkerException(sprintf("Unsupported message type: %s", $messageType->value)),
-        };
-
-        $DBParser->parse($prep[0]);
-        return $DBParser;
+        return array_reduce($prep, function ($acc, $v) use ($messageType) {
+            $DBParser = match ($messageType) {
+                INOVERTMessageType::SCONTR => new DBShenkerScontrParser(),
+                default => throw new DBShenkerException(sprintf("Unsupported message type: %s", $messageType->value)),
+            };
+            $DBParser->parse($v);
+            $acc[] = $DBParser;
+            return $acc;
+        }, []);
     }
 }
