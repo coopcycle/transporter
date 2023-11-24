@@ -14,7 +14,8 @@
     "require": {
         "sabas/edifact": "^0.6.1",
         "php-edifact/edifact-mapping": "dev-master",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "league/flysystem": "^3.0"
     },
     "repositories": [{
         "type": "vcs",
