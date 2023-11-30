@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a2b97dd1223f9cebb0f07dd4a90e7933",
+    "content-hash": "f747968a165e0d6a77df2e95348f294c",
     "packages": [
         {
             "name": "league/flysystem",
@@ -215,6 +215,59 @@
             "time": "2023-10-17T14:13:20+00:00"
         },
         {
+            "name": "php-edifact/edifact-generator",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/coopcycle/edifact-generator.git",
+                "reference": "d87ce1d945adebf6482c993e778f4b471995073e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/coopcycle/edifact-generator/zipball/d87ce1d945adebf6482c993e778f4b471995073e",
+                "reference": "d87ce1d945adebf6482c993e778f4b471995073e",
+                "shasum": ""
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.9.5",
+                "phpunit/phpunit": "~8.0",
+                "sabas/edifact": "^0.4.1"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EDI\\Generator\\": "src/Generator/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "vendor/bin/phpunit"
+                ],
+                "codestyle:fix": [
+                    "vendor/bin/php-cs-fixer fix"
+                ],
+                "codestyle:lint": [
+                    "vendor/bin/php-cs-fixer fix --dry-run"
+                ]
+            },
+            "license": [
+                "LGPL-3.0-or-later"
+            ],
+            "description": "EDIFACT message generators",
+            "homepage": "https://github.com/php-edifact/edifact-generator",
+            "keywords": [
+                "EDI",
+                "EDIFACT",
+                "generator",
+                "message"
+            ],
+            "support": {
+                "source": "https://github.com/coopcycle/edifact-generator/tree/master"
+            },
+            "time": "2023-11-30T14:55:40+00:00"
+        },
+        {
             "name": "php-edifact/edifact-mapping",
             "version": "dev-master",
             "source": {
@@ -321,7 +374,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "php-edifact/edifact-mapping": 20
+        "php-edifact/edifact-mapping": 20,
+        "php-edifact/edifact-generator": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

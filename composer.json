@@ -14,12 +14,16 @@
     "require": {
         "sabas/edifact": "^0.6.1",
         "php-edifact/edifact-mapping": "dev-master",
+        "php-edifact/edifact-generator": "dev-master",
         "ext-curl": "*",
         "league/flysystem": "^3.0"
     },
     "repositories": [{
         "type": "vcs",
         "url": "https://github.com/coopcycle/edifact-mapping"
+    }, {
+        "type": "vcs",
+        "url": "https://github.com/coopcycle/edifact-generator"
     }],
     "minimum-stability": "dev"
 }
