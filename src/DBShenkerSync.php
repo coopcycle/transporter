@@ -28,9 +28,11 @@ class DBShenkerSync {
         return array_map(fn ($file) => $this->filesystem->read($file->path()), $this->unflushed);
     } 
 
-    public function flush(): void
+    public function flush(bool $dry_run = false): void
     {
-        array_walk($this->unflushed, fn ($file) => $this->filesystem->delete($file->path()));
+        if ($dry_run) {
+            array_walk($this->unflushed, fn ($file) => $this->filesystem->delete($file->path()));
+        }
         $this->unflushed = [];
     }
 
