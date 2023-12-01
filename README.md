@@ -86,6 +86,7 @@ $sync = new \DBShenker\DBShenkerSync($options);
 $messages = $sync->pull()
 foreach ($messages as $message) {
     $tasks = \DBShenker\DBShenker::parse($message);
+    # ... do some stuff with $tasks
 }
 
 # If everything went fine, flush messages
