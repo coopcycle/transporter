@@ -8,7 +8,7 @@ use DBShenker\Enum\ReportSituation;
 use EDI\Generator\Report;
 use EDI\Generator\Segment\NameAndAddress;
 
-class DBShenkerReportGenerator
+class DBShenkerReport implements DBShenkerGeneratorInterface
 {
     private string $reference;
     private string $receipt;
@@ -22,19 +22,19 @@ class DBShenkerReportGenerator
         private readonly DBShenkerOptions $options
     ) { }
 
-    public function setReference(string $reference): DBShenkerReportGenerator
+    public function setReference(string $reference): DBShenkerReport
     {
         $this->reference = $reference;
         return $this;
     }
 
-    public function setReceipt(string $receipt): DBShenkerReportGenerator
+    public function setReceipt(string $receipt): DBShenkerReport
     {
         $this->receipt = $receipt;
         return $this;
     }
 
-    public function setComment(?string $comment): DBShenkerReportGenerator
+    public function setComment(?string $comment): DBShenkerReport
     {
         $this->comment = $comment;
         return $this;
@@ -45,25 +45,25 @@ class DBShenkerReportGenerator
      * @param array $pod
      * @return $this
      */
-    public function setPod(array $pod): DBShenkerReportGenerator
+    public function setPod(array $pod): DBShenkerReport
     {
         $this->pod = $pod;
         return $this;
     }
 
-    public function setSituation(ReportSituation $situation): DBShenkerReportGenerator
+    public function setSituation(ReportSituation $situation): DBShenkerReport
     {
         $this->situation = $situation;
         return $this;
     }
 
-    public function setReason(ReportReason $reason): DBShenkerReportGenerator
+    public function setReason(ReportReason $reason): DBShenkerReport
     {
         $this->reason = $reason;
         return $this;
     }
 
-    public function setAppointment(?\DateTime $appointment): DBShenkerReportGenerator
+    public function setAppointment(?\DateTime $appointment): DBShenkerReport
     {
         $this->appointment = $appointment;
         return $this;

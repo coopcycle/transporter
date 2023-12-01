@@ -1,11 +1,11 @@
 # DBShenker client
 
 
-### Exemples
+### Examples
 
+#### Reading SCONTR message
 ```php
 const FILE = './SCONTR.txt';
-
 
 /** @var \DBShenker\Parser\DBShenkerScontrParser $t */
 $t = DBShenker::parse(FILE);
@@ -21,5 +21,44 @@ foreach ($t as $value) {
         print_r("\n\n");
     }
 }
+```
 
+#### Generate REPORT message
+```php
+
+# Init filesystem, used to sync between coop and DBShenker Agency
+$filesystem = new \League\Flysystem\Filesystem(
+    new \League\Flysystem\Local\LocalFilesystemAdapter('/tmp')
+);
+
+# Init DBShenker options
+$options = new \DBShenker\DBShenkerOptions(
+    "CoopX", "362521879",
+    "DBShenker Agency X", "347569895",
+    $filesystem
+);
+
+# Generate a sucessfull delivery with 2 POD
+$reportA = (new \DBShenker\Generator\DBShenkerReport($options))
+    ->setReference('AABBCC')
+    ->setReceipt('123')
+    ->setSituation(\DBShenker\Enum\ReportSituation::POD)
+    ->setReason(\DBShenker\Enum\ReportReason::CFM)
+    ->setPod(['https://foo.com/file.png', 'https://foo.com/file2.png']);
+
+# Generate new appoitement for a failed delivery 
+$reportB = (new \DBShenker\Generator\DBShenkerReport($options))
+    ->setReference('ZZYYXX')
+    ->setReceipt('123')
+    ->setSituation(\DBShenker\Enum\ReportSituation::ENE)
+    ->setReason(\DBShenker\Enum\ReportReason::NRV)
+    ->setAppointment(new DateTime("05-12-2023 11:30"));
+    
+# Generate EDIFACT content
+$message = (new \DBShenker\Generator\DBShenkerInterchange($options))
+ ->addGenerator($reportA)
+ ->addGenerator($reportB)
+ ->generate();
+
+echo $message;
 ```
