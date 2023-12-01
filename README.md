@@ -1,8 +1,9 @@
 # DBShenker client
 
 
-### Examples
+## Examples
 
+### Manipuling messages
 #### Reading SCONTR message
 ```php
 const FILE = './SCONTR.txt';
@@ -35,7 +36,7 @@ $filesystem = new \League\Flysystem\Filesystem(
 $options = new \DBShenker\DBShenkerOptions(
     "CoopX", "362521879",
     "DBShenker Agency X", "347569895",
-    $filesystem
+    $filesystem, 'coopx'
 );
 
 # Generate a sucessfull delivery with 2 POD
@@ -61,4 +62,60 @@ $message = (new \DBShenker\Generator\DBShenkerInterchange($options))
  ->generate();
 
 echo $message;
+```
+
+### Sync with DBShenker Agency
+#### Pull from DBShenker
+```php
+# Init filesystem, used to sync between coop and DBShenker Agency
+$filesystem = new \League\Flysystem\Filesystem(
+    new \League\Flysystem\Local\LocalFilesystemAdapter('/tmp')
+);
+
+# Init DBShenker options
+$options = new \DBShenker\DBShenkerOptions(
+    "CoopX", "362521879",
+    "DBShenker Agency X", "347569895",
+    $filesystem, 'coopx'
+);
+
+# Init sync class
+$sync = new \DBShenker\DBShenkerSync($options);
+
+# Pull then parse messages
+$messages = $sync->pull()
+foreach ($messages as $message) {
+    $tasks = \DBShenker\DBShenker::parse($message);
+}
+
+# If everything went fine, flush messages
+$sync->flush();
+```
+
+#### Push to DBShenker
+```php
+# Init filesystem, used to sync between coop and DBShenker Agency
+$filesystem = new \League\Flysystem\Filesystem(
+    new \League\Flysystem\Local\LocalFilesystemAdapter('/tmp')
+);
+
+# Init DBShenker options
+$options = new \DBShenker\DBShenkerOptions(
+    "CoopX", "362521879",
+    "DBShenker Agency X", "347569895",
+    $filesystem, 'coopx'
+);
+
+# Init sync class
+$sync = new \DBShenker\DBShenkerSync($options);
+
+# Generate EDIFACT content
+$message = (new \DBShenker\Generator\DBShenkerInterchange($options))
+ ->addGenerator($reportA)
+ ->addGenerator($reportB)
+ ->generate();
+
+# Push message to DBShenker
+$sync->push($message);
+
 ```

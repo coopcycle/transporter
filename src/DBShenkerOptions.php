@@ -7,11 +7,12 @@ use League\Flysystem\Filesystem;
 class DBShenkerOptions {
 
     public function __construct(
-        private string $coop_name,
-        private string $coop_siret,
-        private string $agency_name,
-        private string $agency_siret,
-        private Filesystem $filesystem,
+        private readonly string     $coop_name,
+        private readonly string     $coop_siret,
+        private readonly string     $agency_name,
+        private readonly string     $agency_siret,
+        private readonly Filesystem $filesystem,
+        private readonly string     $filemask
     ) { }
 
     public function getCoopName(): string
@@ -37,5 +38,10 @@ class DBShenkerOptions {
     public function getFilesystem(): Filesystem
     {
         return $this->filesystem;
+    }
+
+    public function getFilemask(): string
+    {
+        return $this->filemask;
     }
 }
