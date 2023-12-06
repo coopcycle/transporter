@@ -18,13 +18,13 @@ class DBShenkerSync {
      */
     public function pull(): array
     {
-        $this->unflushed = $this->options->getFilesystem()->listContents(sprintf("from_%s", $this->options->getFilemask()))
-            ->filter(fn ($file) => !str_ends_with($file->path(), '.tmp') |
-                    $file->isFile() |
-                    $file->fileSize() > 0)
-            ->toArray();
+        $this->unflushed = array_filter(
+            $this->options->getFilesystem()
+            ->listContents(sprintf("from_%s", $this->options->getFilemask())),
+            fn ($file) => !str_ends_with($file['path'], '.tmp') & $file['size'] > 0 & $file['type'] === 'file'
+        );
 
-        return array_map(fn ($file) => $this->options->getFilesystem()->read($file->path()), $this->unflushed);
+        return array_map(fn ($file) => $this->options->getFilesystem()->read($file['path']), $this->unflushed);
     }
 
     /**
