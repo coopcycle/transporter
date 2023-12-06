@@ -54,7 +54,7 @@ class DBShenkerSync {
             date('YmdHis'), uniqid()
         );
         $this->options->getFilesystem()->write(sprintf("%s.tmp", $path), $message);
-        $this->options->getFilesystem()->move(sprintf("%s.tmp", $path), $path);
+        $this->options->getFilesystem()->rename(sprintf("%s.tmp", $path), $path);
     }
 
 }
