@@ -124,6 +124,11 @@ class DBShenkerScontrParser implements DBShenkerParserInterface
             $ret = new NameAndAddress();
             $ret->setType(NameAndAddressType::from($nad['nameAndAddress']['quality']));
 
+            if (is_array($nad['nameAndAddress']['emmetName'])) {
+                $ret->setAddressLabel(join(" ", $nad['nameAndAddress']['emmetName']));
+            } else {
+                $ret->setAddressLabel($nad['nameAndAddress']['emmetName']);
+            }
 
             //print_r(array_merge([], ...array_values(array_slice($nad['nameAndAddress'], 4))));
             //TODO: Enjoy the ugly hack

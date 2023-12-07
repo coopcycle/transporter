@@ -7,6 +7,7 @@ use DBShenker\Enum\NameAndAddressType;
 final class NameAndAddress
 {
     private NameAndAddressType $type;
+    private ?string $addressLabel = null;
     private ?string $contactName = null;
     private ?string $contactSiret = null;
     private ?string $address = null;
@@ -30,6 +31,24 @@ final class NameAndAddress
     public function setType(NameAndAddressType $type): NameAndAddress
     {
         $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAddressLabel(): ?string
+    {
+        return $this->addressLabel;
+    }
+
+    /**
+     * @param string|null $addressLabel
+     * @return NameAndAddress
+     */
+    public function setAddressLabel(?string $addressLabel): NameAndAddress
+    {
+        $this->addressLabel = $addressLabel;
         return $this;
     }
 
