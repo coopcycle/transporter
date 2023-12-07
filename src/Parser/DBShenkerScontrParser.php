@@ -128,7 +128,7 @@ class DBShenkerScontrParser implements DBShenkerParserInterface
             //print_r(array_merge([], ...array_values(array_slice($nad['nameAndAddress'], 4))));
             //TODO: Enjoy the ugly hack
             $address = [];
-            $data = array_values(array_slice($nad['nameAndAddress'], 5));
+            $data = array_values(array_slice($nad['nameAndAddress'], 7));
             array_walk_recursive($data, function ($v) use (&$address) {
                 $address[] = trim($v);
             });
