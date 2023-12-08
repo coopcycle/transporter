@@ -3,6 +3,7 @@
 namespace DBShenker\DTO;
 
 use DBShenker\Enum\NameAndAddressType;
+use DBShenker\Enum\ProductClass;
 
 class GR7
 {
@@ -21,6 +22,8 @@ class GR7
     /** @var array<Package> */
     private array $packages;
 
+    private ProductClass $productClass;
+
     private ?string $comments;
 
     /**
@@ -37,6 +40,7 @@ class GR7
         array $dates = [],
         array $mesurements = [],
         array $packages = [],
+        ProductClass $productClass,
         ?string $comments = null
     )
     {
@@ -45,6 +49,7 @@ class GR7
         $this->dates = $dates;
         $this->mesurements = $mesurements;
         $this->packages = $packages;
+        $this->productClass = $productClass;
         $this->comments = $comments;
     }
 
@@ -91,6 +96,14 @@ class GR7
     public function getPackages(): array
     {
         return $this->packages;
+    }
+
+    /**
+    * @return ProductClass
+    */
+    public function getProductClass(): ProductClass
+    {
+        return $this->productClass;
     }
 
     /**

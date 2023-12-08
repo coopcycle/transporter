@@ -11,6 +11,7 @@ use DBShenker\DTO\Package;
 use DBShenker\Enum\CommunicationMeanType;
 use DBShenker\Enum\DateEventType;
 use DBShenker\Enum\NameAndAddressType;
+use DBShenker\Enum\ProductClass;
 use DBShenker\Enum\ProductType;
 use DBShenker\Enum\QuantityType;
 use DBShenker\Enum\QuantityUnitType;
@@ -53,6 +54,7 @@ class DBShenkerScontrParser implements DBShenkerParserInterface
             dates: self::getDates($gr7),
             mesurements: self::getMesurements($gr7),
             packages: self::getPackages($gr7),
+            productClass: self::getProductClass($gr7),
             comments: self::getComments($gr7)
         );
     }
@@ -181,6 +183,21 @@ class DBShenkerScontrParser implements DBShenkerParserInterface
             );
             return $acc;
         }, []);
+    }
+
+
+    /**
+     * @param $message
+     * @return ProductClass
+     */
+    private static function getProductClass(array $message): ProductClass
+    {
+        if (isset($message['productType'])) {
+            return ProductClass::from(
+                $message['productType']['regime'],
+                $message['productType']['productType']
+            );
+        }
     }
 
     /**
