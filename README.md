@@ -5,10 +5,11 @@
 
 ### Manipuling messages
 #### Reading SCONTR message
+
 ```php
 const FILE = './SCONTR.txt';
 
-/** @var \DBShenker\Parser\DBShenkerScontrParser $t */
+/** @var \DBSchenker\Parser\DBSchenkerScontrParser $t */
 $t = DBShenker::parse(FILE);
 //$t->setAddressGeocoder(new GoogleMapsAddressGeocoder(getenv('MAPS_KEY')));
 
@@ -25,6 +26,7 @@ foreach ($t as $value) {
 ```
 
 #### Generate REPORT message
+
 ```php
 
 # Init filesystem, used to sync between coop and DBShenker Agency
@@ -33,30 +35,30 @@ $filesystem = new \League\Flysystem\Filesystem(
 );
 
 # Init DBShenker options
-$options = new \DBShenker\DBShenkerOptions(
+$options = new \DBSchenker\DBSchenkerOptions(
     "CoopX", "362521879",
     "DBShenker Agency X", "347569895",
     $filesystem, 'coopx'
 );
 
 # Generate a sucessfull delivery with 2 POD
-$reportA = (new \DBShenker\Generator\DBShenkerReport($options))
+$reportA = (new \DBSchenker\Generator\DBSchenkerReport($options))
     ->setReference('AABBCC')
     ->setReceipt('123')
-    ->setSituation(\DBShenker\Enum\ReportSituation::POD)
-    ->setReason(\DBShenker\Enum\ReportReason::CFM)
+    ->setSituation(\DBSchenker\Enum\ReportSituation::POD)
+    ->setReason(\DBSchenker\Enum\ReportReason::CFM)
     ->setPod(['https://foo.com/file.png', 'https://foo.com/file2.png']);
 
 # Generate new appoitement for a failed delivery 
-$reportB = (new \DBShenker\Generator\DBShenkerReport($options))
+$reportB = (new \DBSchenker\Generator\DBSchenkerReport($options))
     ->setReference('ZZYYXX')
     ->setReceipt('123')
-    ->setSituation(\DBShenker\Enum\ReportSituation::ENE)
-    ->setReason(\DBShenker\Enum\ReportReason::NRV)
+    ->setSituation(\DBSchenker\Enum\ReportSituation::ENE)
+    ->setReason(\DBSchenker\Enum\ReportReason::NRV)
     ->setAppointment(new DateTime("05-12-2023 11:30"));
     
 # Generate EDIFACT content
-$message = (new \DBShenker\Generator\DBShenkerInterchange($options))
+$message = (new \DBSchenker\Generator\DBSchenkerInterchange($options))
  ->addGenerator($reportA)
  ->addGenerator($reportB)
  ->generate();
@@ -66,6 +68,7 @@ echo $message;
 
 ### Sync with DBShenker Agency
 #### Pull from DBShenker
+
 ```php
 # Init filesystem, used to sync between coop and DBShenker Agency
 $filesystem = new \League\Flysystem\Filesystem(
@@ -73,19 +76,19 @@ $filesystem = new \League\Flysystem\Filesystem(
 );
 
 # Init DBShenker options
-$options = new \DBShenker\DBShenkerOptions(
+$options = new \DBSchenker\DBSchenkerOptions(
     "CoopX", "362521879",
     "DBShenker Agency X", "347569895",
     $filesystem, 'coopx'
 );
 
 # Init sync class
-$sync = new \DBShenker\DBShenkerSync($options);
+$sync = new \DBSchenker\DBSchenkerSync($options);
 
 # Pull then parse messages
 $messages = $sync->pull()
 foreach ($messages as $message) {
-    $tasks = \DBShenker\DBShenker::parse($message);
+    $tasks = \DBSchenker\DBSchenker::parse($message);
     # ... do some stuff with $tasks
 }
 
@@ -94,6 +97,7 @@ $sync->flush();
 ```
 
 #### Push to DBShenker
+
 ```php
 # Init filesystem, used to sync between coop and DBShenker Agency
 $filesystem = new \League\Flysystem\Filesystem(
@@ -101,21 +105,21 @@ $filesystem = new \League\Flysystem\Filesystem(
 );
 
 # Init DBShenker options
-$options = new \DBShenker\DBShenkerOptions(
+$options = new \DBSchenker\DBSchenkerOptions(
     "CoopX", "362521879",
     "DBShenker Agency X", "347569895",
     $filesystem, 'coopx'
 );
 
 # Init sync class
-$sync = new \DBShenker\DBShenkerSync($options);
+$sync = new \DBSchenker\DBSchenkerSync($options);
 
 # Generate EDIFACT content
-$message = (new \DBShenker\Generator\DBShenkerInterchange($options))
+$message = (new \DBSchenker\Generator\DBSchenkerInterchange($options))
  ->addGenerator($reportA)
  ->addGenerator($reportB)
  ->generate();
-
+)
 # Push message to DBShenker
 $sync->push($message);
 

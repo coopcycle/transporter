@@ -1,5 +1,5 @@
 {
-    "name": "coopcycle/db-shenker",
+    "name": "coopcycle/db-schenker",
     "authors": [
         {
             "name": "Antoine Bagnaud",
@@ -8,7 +8,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "DBShenker\\": "src"
+            "DBSchenker\\": "DBSchenker"
         }
     },
     "require": {
@@ -18,10 +18,12 @@
         "ext-curl": "*",
         "league/flysystem": "1.1.10"
     },
-    "repositories": [{
+    "repositories": [
+    {
         "type": "vcs",
         "url": "https://github.com/coopcycle/edifact-mapping"
-    }, {
+    },
+    {
         "type": "vcs",
         "url": "https://github.com/coopcycle/edifact-generator"
     }]
