@@ -10,6 +10,7 @@ use EDI\Generator\Segment\NameAndAddress;
 
 class DBSchenkerReport implements DBSchenkerGeneratorInterface
 {
+    private string $docID;
     private string $reference;
     private string $receipt;
     private ?string $comment = null;
@@ -22,6 +23,12 @@ class DBSchenkerReport implements DBSchenkerGeneratorInterface
         private readonly DBSchenkerOptions $options
     ) { }
 
+    public function setDocID(string $docID): DBSchenkerReport
+    {
+        $this->docID = $docID;
+        return $this;
+    }
+    
     public function setReference(string $reference): DBSchenkerReport
     {
         $this->reference = $reference;
@@ -74,7 +81,7 @@ class DBSchenkerReport implements DBSchenkerGeneratorInterface
     {
         return (new NameAndAddress())
             ->setPartyFunctionCodeQualifier('MS')
-            ->setPartyIdentificationDetails($this->options->getAgencySiret(), 5)
+            ->setPartyIdentificationDetails($this->options->getAgencySiret(), '5')
             ->setPartyName([$this->options->getAgencyName()]);
     }
 
@@ -82,7 +89,7 @@ class DBSchenkerReport implements DBSchenkerGeneratorInterface
     {
         return (new NameAndAddress())
             ->setPartyFunctionCodeQualifier('MR')
-            ->setPartyIdentificationDetails($this->options->getCoopSiret(), 5)
+            ->setPartyIdentificationDetails($this->options->getCoopSiret(), '5')
             ->setPartyName([$this->options->getCoopName()]);
     }
 
@@ -90,6 +97,7 @@ class DBSchenkerReport implements DBSchenkerGeneratorInterface
     public function generate(): Report
     {
         $report = (new Report())
+            ->addBGMSegment($this->docID, null)
             ->addNAD($this->getCoopNAD())
             ->addNAD($this->getAgencyNAD())
             ->setReference($this->reference)
