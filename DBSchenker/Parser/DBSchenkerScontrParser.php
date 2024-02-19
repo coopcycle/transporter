@@ -29,6 +29,11 @@ class DBSchenkerScontrParser implements DBSchenkerParserInterface
         $this->scontr = $message;
     }
 
+    public function __getScontr(): array
+    {
+        return $this->scontr;
+    }
+
 
     public function getTasks(): array
     {
