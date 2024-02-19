@@ -96,8 +96,8 @@ class DBSchenkerReport implements DBSchenkerGeneratorInterface
 
     public function generate(): Report
     {
-        $report = (new Report())
-            ->addBGMSegment($this->docID, null)
+
+        $report = (new Report($this->docID))
             ->addNAD($this->getCoopNAD())
             ->addNAD($this->getAgencyNAD())
             ->setReference($this->reference)
