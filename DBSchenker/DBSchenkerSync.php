@@ -20,7 +20,7 @@ class DBSchenkerSync {
     {
         $this->unflushed = array_filter(
             $this->options->getFilesystem()
-            ->listContents(sprintf("from_%s", $this->options->getFilemask())),
+            ->listContents(sprintf("to_%s", $this->options->getFilemask())),
             fn ($file) => !str_ends_with($file['path'], '.tmp') & $file['size'] > 0 & $file['type'] === 'file'
         );
 
@@ -48,7 +48,7 @@ class DBSchenkerSync {
      */
     public function push(string $message): void
     {
-        $path = sprintf("to_%s/%s.%s_%s",
+        $path = sprintf("from_%s/%s.%s_%s",
             $this->options->getFilemask(),
             $this->options->getFilemask(),
             date('YmdHis'), uniqid()
