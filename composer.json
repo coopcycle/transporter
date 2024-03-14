@@ -16,7 +16,7 @@
         "php-edifact/edifact-mapping": "dev-master",
         "php-edifact/edifact-generator": "dev-master",
         "ext-curl": "*",
-        "league/flysystem": "1.1.10"
+        "league/flysystem": "^3.0"
     },
     "repositories": [
     {
