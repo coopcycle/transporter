@@ -35,7 +35,7 @@ class DBSchenkerSync {
     public function flush(bool $dry_run = false): void
     {
         if ($dry_run) {
-            array_walk($this->unflushed, fn ($file) => $this->options->getFilesystem()->delete($file->path()));
+            array_walk($this->unflushed, fn ($file) => $this->options->getFilesystem()->delete($file['path']));
         }
         $this->unflushed = [];
     }
