@@ -24,7 +24,8 @@ class DBSchenkerSync {
             ->listContents(sprintf("to_%s", $this->options->getFilemask()))
             ->filter(fn (StorageAttributes $attributes) => $attributes->isFile())
             ->filter(fn (FileAttributes $attrs) =>
-                !str_ends_with($attrs->path(), '.tmp') & $attrs->fileSize() > 0)
+               !str_ends_with($attrs->path(), '.tmp') | $attrs->fileSize() > 0
+            )
             ->toArray();
 
         return array_map(fn ($file) => $this->options->getFilesystem()->read($file->path()), $this->unflushed);
