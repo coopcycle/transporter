@@ -2,7 +2,9 @@
 
 namespace DBSchenker;
 
+use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemException;
+use League\Flysystem\StorageAttributes;
 
 class DBSchenkerSync {
 
@@ -18,13 +20,15 @@ class DBSchenkerSync {
      */
     public function pull(): array
     {
-        $this->unflushed = array_filter(
-            $this->options->getFilesystem()
-            ->listContents(sprintf("to_%s", $this->options->getFilemask())),
-            fn ($file) => !str_ends_with($file['path'], '.tmp') & $file['size'] > 0 & $file['type'] === 'file'
-        );
+        $this->unflushed = $this->options->getFilesystem()
+            ->listContents(sprintf("to_%s", $this->options->getFilemask()))
+            ->filter(fn (StorageAttributes $attributes) => $attributes->isFile())
+            ->filter(fn (FileAttributes $attrs) =>
+               !str_ends_with($attrs->path(), '.tmp') | $attrs->fileSize() > 0
+            )
+            ->toArray();
 
-        return array_map(fn ($file) => $this->options->getFilesystem()->read($file['path']), $this->unflushed);
+        return array_map(fn ($file) => $this->options->getFilesystem()->read($file->path()), $this->unflushed);
     }
 
     /**
@@ -35,7 +39,7 @@ class DBSchenkerSync {
     public function flush(bool $dry_run = false): void
     {
         if (!$dry_run) {
-            array_walk($this->unflushed, fn ($file) => $this->options->getFilesystem()->delete($file['path']));
+            array_walk($this->unflushed, fn ($file) => $this->options->getFilesystem()->delete($file->path()));
         }
         $this->unflushed = [];
     }
@@ -54,7 +58,7 @@ class DBSchenkerSync {
             date('YmdHis'), uniqid()
         );
         $this->options->getFilesystem()->write(sprintf("%s.tmp", $path), $message);
-        $this->options->getFilesystem()->rename(sprintf("%s.tmp", $path), $path);
+        $this->options->getFilesystem()->move(sprintf("%s.tmp", $path), $path);
     }
 
 }
