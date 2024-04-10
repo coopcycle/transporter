@@ -2,6 +2,7 @@
 
 namespace DBSchenker\DTO;
 
+use DBSchenker\Enum\DateEventType;
 use DBSchenker\Enum\NameAndAddressType;
 use DBSchenker\Enum\ProductClass;
 
@@ -77,8 +78,12 @@ class GR7
     /**
      * @return array
      */
-    public function getDates(): array
+    public function getDates(?DateEventType $type = null): array
     {
+
+        if (!is_null($type)) {
+            return array_filter($this->dates, fn($date) => $date->getEvent() === $type);
+        }
         return $this->dates;
     }
 
