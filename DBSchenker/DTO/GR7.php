@@ -22,7 +22,7 @@ class GR7
     /** @var array<Package> */
     private array $packages;
 
-    private ProductClass $productClass;
+    private ?ProductClass $productClass;
 
     private ?string $comments;
 
@@ -40,7 +40,7 @@ class GR7
         array $dates = [],
         array $mesurements = [],
         array $packages = [],
-        ProductClass $productClass,
+        ?ProductClass $productClass = null,
         ?string $comments = null
     )
     {
@@ -99,9 +99,9 @@ class GR7
     }
 
     /**
-    * @return ProductClass
+    * @return ?ProductClass
     */
-    public function getProductClass(): ProductClass
+    public function getProductClass(): ?ProductClass
     {
         return $this->productClass;
     }

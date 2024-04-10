@@ -180,14 +180,35 @@ class DBSchenkerScontrParser implements DBSchenkerParserInterface
     {
 
         return array_reduce($message['GR8'], function ($acc, $date) {
-            if (isset($date['Date']))
-            $acc[] = new Date(
-                event: DateEventType::from($date['Date']['event']),
-                date: \DateTime::createFromFormat('ymd', $date['Date']['date'])
-                    ->setTime(0,0)
-            );
+            if (isset($date['Date'])) {
+
+                if (isset($date['Date']['event']) && isset($date['Date']['date'])) {
+                    $acc[] = self::parseDate($date['Date']['event'], $date['Date']['date']);
+                    return $acc;
+                }
+
+                if (
+                    is_array($date['Date']) &&
+                        count($date['Date']) > 0 &&
+                        isset($date['Date'][0]) &&
+                        is_array($date['Date'][0])
+                ) {
+                    $dates = array_map(function($v) {
+                        return self::parseDate($v['event'], $v['date'], $v['hour'] ?? "0000");
+                    }, $date['Date']);
+                    $acc = array_merge($acc, $dates);
+                }
+            }
             return $acc;
         }, []);
+    }
+
+    private static function parseDate(string $event, string $date, string $hour = "0000"): Date
+    {
+        return new Date(
+            event: DateEventType::from($event),
+            date: \DateTime::createFromFormat('ymd Hi', sprintf('%s %s', $date, $hour))
+        );
     }
 
 
