@@ -14,9 +14,10 @@ class DBSchenkerReport implements DBSchenkerGeneratorInterface
     private string $reference;
     private string $receipt;
     private ?string $comment = null;
-    private array $pod = [];
+    private array $pods = [];
     private ReportSituation $situation;
     private ReportReason $reason;
+    private ?\DateTime $dsj = null;
     private ?\DateTime $appointment = null;
 
     public function __construct(
@@ -49,12 +50,12 @@ class DBSchenkerReport implements DBSchenkerGeneratorInterface
 
     /**
      * Should be an array of URI publicly accessible of the POD(s)
-     * @param array $pod
+     * @param array $pods
      * @return $this
      */
-    public function setPod(array $pod): DBSchenkerReport
+    public function setPods(array $pods): DBSchenkerReport
     {
-        $this->pod = $pod;
+        $this->pods = $pods;
         return $this;
     }
 
@@ -68,6 +69,11 @@ class DBSchenkerReport implements DBSchenkerGeneratorInterface
     {
         $this->reason = $reason;
         return $this;
+    }
+
+    public function setDSJ(\DateTime $datetime): DBSchenkerReport
+    {
+        $this->dsj = $datetime;
     }
 
     public function setAppointment(?\DateTime $appointment): DBSchenkerReport
@@ -104,8 +110,11 @@ class DBSchenkerReport implements DBSchenkerGeneratorInterface
             ->setReason($this->situation->name, $this->reason->name)
             ->setReceipt($this->receipt)
             ->setComment($this->comment)
-            ->setPOD($this->pod);
+            ->setPOD($this->pods);
 
+        if (!is_null($this->dsj)) {
+            $report->setDTM($this->dsj, 'DSJ');
+        }
         if (!is_null($this->appointment)) {
             $report->setDTM($this->appointment, 'DAD');
         }
