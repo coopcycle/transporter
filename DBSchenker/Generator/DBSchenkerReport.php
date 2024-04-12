@@ -74,6 +74,7 @@ class DBSchenkerReport implements DBSchenkerGeneratorInterface
     public function setDSJ(\DateTime $datetime): DBSchenkerReport
     {
         $this->dsj = $datetime;
+        return $this;
     }
 
     public function setAppointment(?\DateTime $appointment): DBSchenkerReport
