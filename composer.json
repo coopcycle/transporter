@@ -8,8 +8,11 @@
     ],
     "autoload": {
         "psr-4": {
-            "DBSchenker\\": "DBSchenker"
-        }
+            "Transporter\\": "Transporter/"
+        },
+        "files": [
+            "Transporter/helpers.php"
+        ]
     },
     "require": {
         "sabas/edifact": "^0.6.1",
