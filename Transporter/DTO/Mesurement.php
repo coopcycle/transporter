@@ -5,14 +5,14 @@ namespace Transporter\DTO;
 use Transporter\Enum\QuantityType;
 use Transporter\Enum\QuantityUnitType;
 
-class Mesurement
+final class Mesurement
 {
 
     private QuantityType $type;
 
     private int $quantity;
 
-    private quantityUnitType $unit;
+    private QuantityUnitType $unit;
 
     /**
      * @param QuantityType $type

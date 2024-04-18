@@ -4,7 +4,7 @@ namespace Transporter\DTO;
 
 use Transporter\Enum\CommunicationMeanType;
 
-class CommunicationMean
+final class CommunicationMean
 {
     private CommunicationMeanType $type;
 

@@ -4,7 +4,7 @@ namespace Transporter\DTO;
 
 use Transporter\Enum\ProductType;
 
-class Package
+final class Package
 {
     private ProductType $type;
 
