@@ -123,7 +123,4 @@ class DBSchenkerReportGenerator implements ReportGeneratorInterface
 
         return $report;
     }
-
-
-
 }
