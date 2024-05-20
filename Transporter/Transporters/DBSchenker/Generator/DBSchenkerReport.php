@@ -7,9 +7,9 @@ use EDI\Generator\Report;
 use EDI\Generator\Segment\NameAndAddress;
 use Transporter\Enum\ReportReason;
 use Transporter\Enum\ReportSituation;
-use Transporter\Interface\DBSchenkerGeneratorInterface;
+use Transporter\Interface\GeneratorInterface;
 
-class DBSchenkerReport implements DBSchenkerGeneratorInterface
+class DBSchenkerReport implements GeneratorInterface
 {
     private string $docID;
     private string $reference;

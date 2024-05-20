@@ -2,7 +2,7 @@
 
 namespace Transporter\Interface;
 
-interface DBSchenkerGeneratorInterface
+interface GeneratorInterface
 {
 
 }
