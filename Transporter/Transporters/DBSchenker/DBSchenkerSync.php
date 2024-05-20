@@ -2,12 +2,13 @@
 
 namespace Transporter\Transporters\DBSchenker;
 
+use Transporter\Interface\TransporterSync;
 use Transporter\TransporterOptions;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\StorageAttributes;
 
-class DBSchenkerSync {
+class DBSchenkerSync implements TransporterSync {
 
     private array $unflushed = [];
 
@@ -16,10 +17,11 @@ class DBSchenkerSync {
     ) { }
 
     /**
+     * @param array $options
      * @return array
      * @throws FilesystemException
      */
-    public function pull(): array
+    public function pull(array $options = []): array
     {
         $this->unflushed = $this->options->getFilesystem()
             ->listContents(sprintf("to_%s", $this->options->getFilemask()))
@@ -48,10 +50,11 @@ class DBSchenkerSync {
 
     /**
      * @param string $message
+     * @param array $options
      * @return void
      * @throws FilesystemException
      */
-    public function push(string $message): void
+    public function push(string $message, array $options = []): void
     {
         $path = sprintf("from_%s/%s.%s_%s",
             $this->options->getFilemask(),
