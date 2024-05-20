@@ -7,6 +7,7 @@ use League\Flysystem\Filesystem;
 class TransporterOptions {
 
     public function __construct(
+        private readonly string     $transporter,
         private readonly string     $coop_name,
         private readonly string     $coop_siret,
         private readonly string     $agency_name,
@@ -14,6 +15,11 @@ class TransporterOptions {
         private readonly Filesystem $filesystem,
         private readonly string     $filemask
     ) { }
+
+    public function getTransporter(): string
+    {
+        return $this->transporter;
+    }
 
     public function getCoopName(): string
     {
