@@ -2,7 +2,7 @@
 
 namespace Transporter\Interface;
 
-interface GeneratorInterface
+interface ReportGeneratorInterface
 {
 
 }

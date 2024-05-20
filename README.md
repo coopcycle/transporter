@@ -42,7 +42,7 @@ $options = new \Transporter\TransporterOptions(
 );
 
 # Generate a sucessfull delivery with 2 POD
-$reportA = (new \Transporter\Transporters\DBSchenker\Generator\DBSchenkerReport($options))
+$reportA = (new \Transporter\Transporters\DBSchenker\Generator\DBSchenkerReportGenerator($options))
     ->setReference('AABBCC')
     ->setReceipt('123')
     ->setSituation(\Transporter\Enum\ReportSituation::POD)
@@ -50,7 +50,7 @@ $reportA = (new \Transporter\Transporters\DBSchenker\Generator\DBSchenkerReport(
     ->setPod(['https://foo.com/file.png', 'https://foo.com/file2.png']);
 
 # Generate new appoitement for a failed delivery 
-$reportB = (new \Transporter\Transporters\DBSchenker\Generator\DBSchenkerReport($options))
+$reportB = (new \Transporter\Transporters\DBSchenker\Generator\DBSchenkerReportGenerator($options))
     ->setReference('ZZYYXX')
     ->setReceipt('123')
     ->setSituation(\Transporter\Enum\ReportSituation::ENE)

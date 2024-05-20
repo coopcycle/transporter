@@ -5,13 +5,13 @@ namespace Transporter\Transporters\DBSchenker\Generator;
 use Transporter\TransporterOptions;
 use EDI\Encoder;
 use EDI\Generator\Interchange;
-use Transporter\Interface\GeneratorInterface;
+use Transporter\Interface\ReportGeneratorInterface;
 
 class DBSchenkerInterchange
 {
 
     /**
-     * @var array<GeneratorInterface>
+     * @var array<ReportGeneratorInterface>
      */
     private array $generators = [];
 
@@ -20,7 +20,7 @@ class DBSchenkerInterchange
     )
     { }
 
-    public function addGenerator(GeneratorInterface $generator): self
+    public function addGenerator(ReportGeneratorInterface $generator): self
     {
         $this->generators[] = $generator;
         return $this;

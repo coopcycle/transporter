@@ -7,9 +7,9 @@ use EDI\Generator\Report;
 use EDI\Generator\Segment\NameAndAddress;
 use Transporter\Enum\ReportReason;
 use Transporter\Enum\ReportSituation;
-use Transporter\Interface\GeneratorInterface;
+use Transporter\Interface\ReportGeneratorInterface;
 
-class DBSchenkerReport implements GeneratorInterface
+class DBSchenkerReportGenerator implements ReportGeneratorInterface
 {
     private string $docID;
     private string $reference;
@@ -25,25 +25,25 @@ class DBSchenkerReport implements GeneratorInterface
         private readonly TransporterOptions $options
     ) { }
 
-    public function setDocID(string $docID): DBSchenkerReport
+    public function setDocID(string $docID): DBSchenkerReportGenerator
     {
         $this->docID = $docID;
         return $this;
     }
     
-    public function setReference(string $reference): DBSchenkerReport
+    public function setReference(string $reference): DBSchenkerReportGenerator
     {
         $this->reference = $reference;
         return $this;
     }
 
-    public function setReceipt(string $receipt): DBSchenkerReport
+    public function setReceipt(string $receipt): DBSchenkerReportGenerator
     {
         $this->receipt = $receipt;
         return $this;
     }
 
-    public function setComment(?string $comment): DBSchenkerReport
+    public function setComment(?string $comment): DBSchenkerReportGenerator
     {
         $this->comment = $comment;
         return $this;
@@ -54,31 +54,31 @@ class DBSchenkerReport implements GeneratorInterface
      * @param array $pods
      * @return $this
      */
-    public function setPods(array $pods): DBSchenkerReport
+    public function setPods(array $pods): DBSchenkerReportGenerator
     {
         $this->pods = $pods;
         return $this;
     }
 
-    public function setSituation(ReportSituation $situation): DBSchenkerReport
+    public function setSituation(ReportSituation $situation): DBSchenkerReportGenerator
     {
         $this->situation = $situation;
         return $this;
     }
 
-    public function setReason(ReportReason $reason): DBSchenkerReport
+    public function setReason(ReportReason $reason): DBSchenkerReportGenerator
     {
         $this->reason = $reason;
         return $this;
     }
 
-    public function setDSJ(\DateTime $datetime): DBSchenkerReport
+    public function setDSJ(\DateTime $datetime): DBSchenkerReportGenerator
     {
         $this->dsj = $datetime;
         return $this;
     }
 
-    public function setAppointment(?\DateTime $appointment): DBSchenkerReport
+    public function setAppointment(?\DateTime $appointment): DBSchenkerReportGenerator
     {
         $this->appointment = $appointment;
         return $this;
