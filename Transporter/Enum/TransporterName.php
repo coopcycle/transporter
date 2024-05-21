@@ -3,6 +3,6 @@
 namespace Transporter\Enum;
 
 enum TransporterName: string {
-    case DB_SCHENKER = 'DBSchenker';
+    case DB_SCHENKER = 'DBSCHENKER';
     case BMV = 'BMV';
 }
