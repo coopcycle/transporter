@@ -27,7 +27,7 @@ class Transporter
     public static function parse(
         string $inovert,
         INOVERTMessageType $messageType = INOVERTMessageType::SCONTR,
-        TransporterName $transporter = TransporterName::DB_SCHENKER
+        TransporterName $transporter = TransporterName::DBSCHENKER
     ): array
     {
         $parser = new Parser($inovert);
@@ -52,7 +52,7 @@ class Transporter
 
         return array_reduce($prep, function ($acc, $v) use ($transporter, $messageType) {
             $implParser = match ([$transporter, $messageType]) {
-                [TransporterName::DB_SCHENKER, INOVERTMessageType::SCONTR] => new DBSchenkerScontrParser(),
+                [TransporterName::DBSCHENKER, INOVERTMessageType::SCONTR] => new DBSchenkerScontrParser(),
                 [TransporterName::BMV, INOVERTMessageType::SCONTR] => new BMVScontrParser(),
                 default => throw new TransporterException(sprintf("Unsupported message type: %s for transporter: %s", $messageType->value, $transporter->value)),
             };
