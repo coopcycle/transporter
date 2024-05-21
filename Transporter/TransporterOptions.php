@@ -3,20 +3,21 @@
 namespace Transporter;
 
 use League\Flysystem\Filesystem;
+use Transporter\Enum\TransporterName;
 
 class TransporterOptions {
 
     public function __construct(
-        private readonly string     $transporter,
-        private readonly string     $coop_name,
-        private readonly string     $coop_siret,
-        private readonly string     $agency_name,
-        private readonly string     $agency_siret,
-        private readonly Filesystem $filesystem,
-        private readonly string     $filemask
+        private readonly TransporterName     $transporter,
+        private readonly string              $coop_name,
+        private readonly string              $coop_siret,
+        private readonly string              $agency_name,
+        private readonly string              $agency_siret,
+        private readonly Filesystem          $filesystem,
+        private readonly string              $filemask
     ) { }
 
-    public function getTransporter(): string
+    public function getTransporter(): TransporterName
     {
         return $this->transporter;
     }
