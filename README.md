@@ -1,5 +1,14 @@
-# DBShenker client
+# Transporter client
 
+## Depends on the following forks:
+
+- [edifact-mapping](https://github.com/coopcycle/edifact-mapping)
+- [edifact-generator](https://github.com/coopcycle/edifact-generator)
+
+## Transporter currently supported
+
+- DBSchenker
+- BMV
 
 ## Examples
 
