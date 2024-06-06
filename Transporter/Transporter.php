@@ -10,7 +10,7 @@ use Transporter\Enum\INOVERTMessageType;
 use Transporter\Enum\TransporterName;
 use Transporter\Interface\TransporterParserInterface;
 use Transporter\Transporters\DBSchenker\Parser\DBSchenkerScontrParser;
-use Transporter\Transporters\DMV\Parser\BMVScontrParser;
+use Transporter\Transporters\BMV\Parser\BMVScontrParser;
 
 class Transporter
 {

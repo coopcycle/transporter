@@ -1,6 +1,6 @@
 <?php
 
-namespace Transporter\Transporters\DMV\Enum;
+namespace Transporter\Transporters\BMV\Enum;
 
 enum BMVProductClass {
     case AFG_PALETTS;

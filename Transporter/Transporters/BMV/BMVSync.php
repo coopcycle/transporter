@@ -1,6 +1,6 @@
 <?php
 
-namespace Transporter\Transporters\DMV;
+namespace Transporter\Transporters\BMV;
 
 use Transporter\Interface\TransporterSync;
 use Transporter\TransporterOptions;

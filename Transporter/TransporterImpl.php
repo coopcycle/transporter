@@ -7,7 +7,10 @@ use Transporter\Enum\TransporterName;
 use Transporter\Transporters\DBSchenker\DBSchenkerSync;
 use Transporter\Transporters\DBSchenker\Generator\DBSchenkerInterchange;
 use Transporter\Transporters\DBSchenker\Generator\DBSchenkerReportGenerator;
-use Transporter\Transporters\DMV\BMVSync;
+use Transporter\Transporters\BMV\BMVSync;
+use Transporter\Transporters\BMV\Generator\BMVInterchange;
+use Transporter\Transporters\BMV\Generator\BMVReportGenerator;
+
 
 /**
  * Class TransporterImpl
@@ -25,7 +28,9 @@ class TransporterImpl {
             'interchange' => DBSchenkerInterchange::class
         ],
         'BMV' => [
-            'sync' => BMVSync::class
+            'sync' => BMVSync::class,
+            'reportGenerator' => BMVReportGenerator::class,
+            'interchange' => BMVInterchange::class
         ]
     ];
 
