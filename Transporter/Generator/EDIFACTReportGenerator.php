@@ -11,15 +11,15 @@ use Transporter\Interface\ReportGeneratorInterface;
 
 class EDIFACTReportGenerator implements ReportGeneratorInterface
 {
-    private string $docID;
-    private string $reference;
-    private string $receipt;
-    private ?string $comment = null;
-    private array $pods = [];
-    private ReportSituation $situation;
-    private ReportReason $reason;
-    private ?\DateTime $dsj = null;
-    private ?\DateTime $appointment = null;
+    protected string $docID;
+    protected string $reference;
+    protected string $receipt;
+    protected ?string $comment = null;
+    protected array $pods = [];
+    protected ReportSituation $situation;
+    protected ReportReason $reason;
+    protected ?\DateTime $dsj = null;
+    protected ?\DateTime $appointment = null;
 
     public function __construct(
         private readonly TransporterOptions $options
