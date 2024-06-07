@@ -85,7 +85,7 @@ class EDIFACTReportGenerator implements ReportGeneratorInterface
     }
 
 
-    private function getAgencyNAD(): NameAndAddress
+    protected  function getAgencyNAD(): NameAndAddress
     {
         return (new NameAndAddress())
             ->setPartyFunctionCodeQualifier('MS')
@@ -93,7 +93,7 @@ class EDIFACTReportGenerator implements ReportGeneratorInterface
             ->setPartyName([$this->options->getAgencyName()]);
     }
 
-    private function getCoopNAD(): NameAndAddress
+    protected function getCoopNAD(): NameAndAddress
     {
         return (new NameAndAddress())
             ->setPartyFunctionCodeQualifier('MR')
