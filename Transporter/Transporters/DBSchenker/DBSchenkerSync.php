@@ -59,8 +59,12 @@ class DBSchenkerSync implements TransporterSync {
     public function push(string $message, array $options = []): void
     {
         $fs = $this->options->getOutFilesystem();
-        $path = sprintf("from_%s/REPORT.%s_%s",
-            $fs->filemask,
+        $options = [
+            'filemask' => $fs->filemask,
+            ...$options
+        ];
+        $path = sprintf("from_%s/%s.%s_%s",
+            $fs->filemask, $fs->filemask,
             date('YmdHis'), uniqid()
         );
         $fs->getFilesystem()->write(sprintf("%s.tmp", $path), $message);
