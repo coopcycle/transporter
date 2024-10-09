@@ -30,8 +30,8 @@ class EDIFACTInterchange implements InterchangeInterface
     public function generate(): string
     {
         $interchange = (new Interchange(
-            [$this->options->getCoopName(), '22'],
-            [$this->options->getAgencyName(), '22'],
+            [$this->options->getCoopSiret(), '22'],
+            [$this->options->getAgencySiret(), '22'],
         ))->setCharset('UNOC', '1');
 
         foreach ($this->generators as $generator) {
