@@ -217,12 +217,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/coopcycle/edifact-generator.git",
-                "reference": "67ff6943d656d8bd5910aaa47d5c9e45f5a9091a"
+                "reference": "b2b3b93201bcc21eab0d8a07a5f3321cbf56499e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coopcycle/edifact-generator/zipball/67ff6943d656d8bd5910aaa47d5c9e45f5a9091a",
-                "reference": "67ff6943d656d8bd5910aaa47d5c9e45f5a9091a",
+                "url": "https://api.github.com/repos/coopcycle/edifact-generator/zipball/b2b3b93201bcc21eab0d8a07a5f3321cbf56499e",
+                "reference": "b2b3b93201bcc21eab0d8a07a5f3321cbf56499e",
                 "shasum": ""
             },
             "require-dev": {
@@ -262,7 +262,7 @@
             "support": {
                 "source": "https://github.com/coopcycle/edifact-generator/tree/master"
             },
-            "time": "2024-04-12T16:11:11+00:00"
+            "time": "2024-10-09T01:47:46+00:00"
         },
         {
             "name": "php-edifact/edifact-mapping",
