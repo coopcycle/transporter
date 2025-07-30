@@ -217,12 +217,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/coopcycle/edifact-generator.git",
-                "reference": "b2b3b93201bcc21eab0d8a07a5f3321cbf56499e"
+                "reference": "f1089a7a1ca6147994492e06f498453765104aa8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coopcycle/edifact-generator/zipball/b2b3b93201bcc21eab0d8a07a5f3321cbf56499e",
-                "reference": "b2b3b93201bcc21eab0d8a07a5f3321cbf56499e",
+                "url": "https://api.github.com/repos/coopcycle/edifact-generator/zipball/f1089a7a1ca6147994492e06f498453765104aa8",
+                "reference": "f1089a7a1ca6147994492e06f498453765104aa8",
                 "shasum": ""
             },
             "require-dev": {
@@ -262,7 +262,7 @@
             "support": {
                 "source": "https://github.com/coopcycle/edifact-generator/tree/master"
             },
-            "time": "2024-10-09T01:47:46+00:00"
+            "time": "2025-07-30T05:08:43+00:00"
         },
         {
             "name": "php-edifact/edifact-mapping",
@@ -371,14 +371,14 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "php-edifact/edifact-mapping": 20,
-        "php-edifact/edifact-generator": 20
+        "php-edifact/edifact-generator": 20,
+        "php-edifact/edifact-mapping": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "ext-curl": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }
