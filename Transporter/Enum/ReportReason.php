@@ -4,6 +4,7 @@ namespace Transporter\Enum;
 
 enum ReportReason: string {
     case AVA = 'Damage';
+    case AVI = 'Recipient advised';
     case CEX = 'Excess parcel';
     case CFM = 'Conform';
     case DDT = 'Customs cleared';
@@ -42,6 +43,7 @@ enum ReportReason: string {
     case NEM = 'Receipt not endorsed';
     case RSY = 'Systematic reserves';
     case POS = 'Position';
+    case SNC = 'Refused, not ordered';
     case SPD = 'Refuse port due';
     case SPL = 'Partial suffering';
     case SPO = 'Reserves/Refused spoliation';

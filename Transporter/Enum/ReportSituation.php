@@ -24,6 +24,7 @@ enum ReportSituation: string {
     case QIN = 'Information request';
     case RAQ = 'Remaining at quay';
     case REN = 'Returned (not delivered)';
+    case RST = 'Not delivered';
     case SEQ = 'Equipment consigned';
     case SOL = 'Settled';
 }

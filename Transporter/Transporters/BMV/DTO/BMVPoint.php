@@ -1,6 +1,6 @@
 <?php
 
-namespace Transporter\Transporters\DMV\DTO;
+namespace Transporter\Transporters\BMV\DTO;
 
 use Transporter\DTO\Date;
 use Transporter\DTO\Mesurement;
@@ -10,7 +10,7 @@ use Transporter\DTO\Point;
 use Transporter\Enum\DateEventType;
 use Transporter\Enum\NameAndAddressType;
 use Transporter\Transporters\DBSchenker\Enum\DBSchenkerProductClass;
-use Transporter\Transporters\DMV\Enum\BMVProductClass;
+use Transporter\Transporters\BMV\Enum\BMVProductClass;
 
 class BMVPoint extends Point
 {

@@ -11,7 +11,7 @@ use Transporter\Enum\TransporterName;
 use Transporter\Interface\TransporterParserInterface;
 use Transporter\Transporters\DBSchenker\Parser\DBSchenkerPickupParser;
 use Transporter\Transporters\DBSchenker\Parser\DBSchenkerScontrParser;
-use Transporter\Transporters\DMV\Parser\BMVScontrParser;
+use Transporter\Transporters\BMV\Parser\BMVScontrParser;
 
 class Transporter
 {
@@ -28,7 +28,7 @@ class Transporter
     public static function parse(
         string $inovert,
         INOVERTMessageType $messageType = INOVERTMessageType::SCONTR,
-        TransporterName $transporter = TransporterName::DB_SCHENKER
+        TransporterName $transporter = TransporterName::DBSCHENKER
     ): array
     {
         $parser = new Parser($inovert);
@@ -53,7 +53,7 @@ class Transporter
 
         return array_reduce($prep, function ($acc, $v) use ($transporter, $messageType) {
             $implParser = match ([$transporter, $messageType]) {
-                [TransporterName::DB_SCHENKER, INOVERTMessageType::SCONTR] => new DBSchenkerScontrParser(),
+                [TransporterName::DBSCHENKER, INOVERTMessageType::SCONTR] => new DBSchenkerScontrParser(),
                 [TransporterName::BMV, INOVERTMessageType::SCONTR] => new BMVScontrParser(),
         [TransporterName::DB_SCHENKER, INOVERTMessageType::PICKUP] => new DBSchenkerPickupParser(),
                 default => throw new TransporterException(sprintf("Unsupported message type: %s for transporter: %s", $messageType->value, $transporter->value)),

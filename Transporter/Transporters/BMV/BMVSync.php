@@ -1,6 +1,6 @@
 <?php
 
-namespace Transporter\Transporters\DBSchenker;
+namespace Transporter\Transporters\BMV;
 
 use Transporter\Interface\TransporterSync;
 use Transporter\TransporterOptions;
@@ -8,7 +8,7 @@ use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\StorageAttributes;
 
-class DBSchenkerSync implements TransporterSync {
+class BMVSync implements TransporterSync {
 
     private array $unflushed = [];
 
@@ -25,7 +25,7 @@ class DBSchenkerSync implements TransporterSync {
     {
         $fs = $this->options->getInFilesystem();
         $this->unflushed = $fs->getFilesystem()
-            ->listContents(sprintf("to_%s", $fs->filemask))
+            ->listContents('/')
             ->filter(fn (StorageAttributes $attributes) => $attributes->isFile())
             ->filter(fn (FileAttributes $attrs) =>
                !str_ends_with($attrs->path(), '.tmp') | $attrs->fileSize() > 0
@@ -59,16 +59,10 @@ class DBSchenkerSync implements TransporterSync {
     public function push(string $message, array $options = []): void
     {
         $fs = $this->options->getOutFilesystem();
-        $options = [
-            'filemask' => $fs->filemask,
-            ...$options
-        ];
-        $path = sprintf("from_%s/%s.%s_%s",
-            $fs->filemask, $fs->filemask,
+        $path = sprintf("REPORT.%s_%s.edi",
             date('YmdHis'), uniqid()
         );
-        $fs->getFilesystem()->write(sprintf("%s.tmp", $path), $message);
-        $fs->getFilesystem()->move(sprintf("%s.tmp", $path), $path);
+        $fs->getFilesystem()->write($path, $message);
     }
 
 }

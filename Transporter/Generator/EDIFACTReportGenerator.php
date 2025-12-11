@@ -1,49 +1,49 @@
 <?php
 
-namespace Transporter\Transporters\DBSchenker\Generator;
+namespace Transporter\Generator;
 
 use Transporter\TransporterOptions;
 use EDI\Generator\Report;
 use EDI\Generator\Segment\NameAndAddress;
 use Transporter\Enum\ReportReason;
 use Transporter\Enum\ReportSituation;
-use Transporter\Interface\DBSchenkerGeneratorInterface;
+use Transporter\Interface\ReportGeneratorInterface;
 
-class DBSchenkerReport implements DBSchenkerGeneratorInterface
+class EDIFACTReportGenerator implements ReportGeneratorInterface
 {
-    private string $docID;
-    private string $reference;
-    private string $receipt;
-    private ?string $comment = null;
-    private array $pods = [];
-    private ReportSituation $situation;
-    private ReportReason $reason;
-    private ?\DateTime $dsj = null;
-    private ?\DateTime $appointment = null;
+    protected string $docID;
+    protected string $reference;
+    protected string $receipt;
+    protected ?string $comment = null;
+    protected array $pods = [];
+    protected ReportSituation $situation;
+    protected ReportReason $reason;
+    protected ?\DateTime $dsj = null;
+    protected ?\DateTime $appointment = null;
 
     public function __construct(
         private readonly TransporterOptions $options
     ) { }
 
-    public function setDocID(string $docID): DBSchenkerReport
+    public function setDocID(string $docID): ReportGeneratorInterface
     {
         $this->docID = $docID;
         return $this;
     }
     
-    public function setReference(string $reference): DBSchenkerReport
+    public function setReference(string $reference): ReportGeneratorInterface
     {
         $this->reference = $reference;
         return $this;
     }
 
-    public function setReceipt(string $receipt): DBSchenkerReport
+    public function setReceipt(string $receipt): ReportGeneratorInterface
     {
         $this->receipt = $receipt;
         return $this;
     }
 
-    public function setComment(?string $comment): DBSchenkerReport
+    public function setComment(?string $comment): ReportGeneratorInterface
     {
         $this->comment = $comment;
         return $this;
@@ -54,38 +54,38 @@ class DBSchenkerReport implements DBSchenkerGeneratorInterface
      * @param array $pods
      * @return $this
      */
-    public function setPods(array $pods): DBSchenkerReport
+    public function setPods(array $pods): ReportGeneratorInterface
     {
         $this->pods = $pods;
         return $this;
     }
 
-    public function setSituation(ReportSituation $situation): DBSchenkerReport
+    public function setSituation(ReportSituation $situation): ReportGeneratorInterface
     {
         $this->situation = $situation;
         return $this;
     }
 
-    public function setReason(ReportReason $reason): DBSchenkerReport
+    public function setReason(ReportReason $reason): ReportGeneratorInterface
     {
         $this->reason = $reason;
         return $this;
     }
 
-    public function setDSJ(\DateTime $datetime): DBSchenkerReport
+    public function setDSJ(\DateTime $datetime): ReportGeneratorInterface
     {
         $this->dsj = $datetime;
         return $this;
     }
 
-    public function setAppointment(?\DateTime $appointment): DBSchenkerReport
+    public function setAppointment(?\DateTime $appointment): ReportGeneratorInterface
     {
         $this->appointment = $appointment;
         return $this;
     }
 
 
-    private function getAgencyNAD(): NameAndAddress
+    protected  function getAgencyNAD(): NameAndAddress
     {
         return (new NameAndAddress())
             ->setPartyFunctionCodeQualifier('MS')
@@ -93,7 +93,7 @@ class DBSchenkerReport implements DBSchenkerGeneratorInterface
             ->setPartyName([$this->options->getAgencyName()]);
     }
 
-    private function getCoopNAD(): NameAndAddress
+    protected function getCoopNAD(): NameAndAddress
     {
         return (new NameAndAddress())
             ->setPartyFunctionCodeQualifier('MR')
@@ -123,7 +123,4 @@ class DBSchenkerReport implements DBSchenkerGeneratorInterface
 
         return $report;
     }
-
-
-
 }

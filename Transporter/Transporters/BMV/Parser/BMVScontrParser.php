@@ -1,11 +1,11 @@
 <?php
 
-namespace Transporter\Transporters\DMV\Parser;
+namespace Transporter\Transporters\BMV\Parser;
 
 use Transporter\Enum\INOVERTMessageType;
 use Transporter\Parser\TransporterParser;
-use Transporter\Transporters\DMV\DTO\BMVPoint;
-use Transporter\Transporters\DMV\Enum\BMVProductClass;
+use Transporter\Transporters\BMV\DTO\BMVPoint;
+use Transporter\Transporters\BMV\Enum\BMVProductClass;
 
 class BMVScontrParser extends TransporterParser
 {
