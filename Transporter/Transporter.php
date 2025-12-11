@@ -9,6 +9,7 @@ use EDI\Parser;
 use Transporter\Enum\INOVERTMessageType;
 use Transporter\Enum\TransporterName;
 use Transporter\Interface\TransporterParserInterface;
+use Transporter\Transporters\DBSchenker\Parser\DBSchenkerPickupParser;
 use Transporter\Transporters\DBSchenker\Parser\DBSchenkerScontrParser;
 use Transporter\Transporters\DMV\Parser\BMVScontrParser;
 
@@ -54,6 +55,7 @@ class Transporter
             $implParser = match ([$transporter, $messageType]) {
                 [TransporterName::DB_SCHENKER, INOVERTMessageType::SCONTR] => new DBSchenkerScontrParser(),
                 [TransporterName::BMV, INOVERTMessageType::SCONTR] => new BMVScontrParser(),
+        [TransporterName::DB_SCHENKER, INOVERTMessageType::PICKUP] => new DBSchenkerPickupParser(),
                 default => throw new TransporterException(sprintf("Unsupported message type: %s for transporter: %s", $messageType->value, $transporter->value)),
             };
             $implParser->parse($v);

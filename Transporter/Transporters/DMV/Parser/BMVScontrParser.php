@@ -2,23 +2,25 @@
 
 namespace Transporter\Transporters\DMV\Parser;
 
+use Transporter\Enum\INOVERTMessageType;
 use Transporter\Parser\TransporterParser;
 use Transporter\Transporters\DMV\DTO\BMVPoint;
 use Transporter\Transporters\DMV\Enum\BMVProductClass;
 
 class BMVScontrParser extends TransporterParser
 {
-    protected function gr7ed(array $gr7): BMVPoint
+    protected function parseTask(array $task): BMVPoint
     {
         $point = new BMVPoint(
-            id: self::getID($gr7),
-            namesAndAddresses: self::getNamesAndAddresses($gr7, $this->addressGeocoder),
-            dates: self::getDates($gr7),
-            mesurements: self::getMesurements($gr7),
-            packages: self::getPackages($gr7),
-            comments: self::getComments($gr7)
+            type: INOVERTMessageType::SCONTR,
+            id: self::getID($task),
+            namesAndAddresses: self::getNamesAndAddresses($task['GR8']),
+            dates: self::getDates($task['GR8']),
+            mesurements: self::getMesurements($task),
+            packages: self::getPackages($task),
+            comments: self::getComments($task)
         );
-        $point->setProductClass(self::getProductClass($gr7));
+        $point->setProductClass(self::getProductClass($task));
         return $point;
     }
 

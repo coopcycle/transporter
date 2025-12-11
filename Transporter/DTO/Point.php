@@ -3,12 +3,14 @@
 namespace Transporter\DTO;
 
 use Transporter\Enum\DateEventType;
+use Transporter\Enum\INOVERTMessageType;
 use Transporter\Enum\NameAndAddressType;
 
 abstract class Point
 {
 
     /**
+     * @param INOVERTMessageType $type
      * @param string $id
      * @param NameAndAddress[] $namesAndAddresses
      * @param Date[] $dates
@@ -17,6 +19,7 @@ abstract class Point
      * @param string|null $comments
      */
     public function __construct(
+        protected INOVERTMessageType $type,
         protected string  $id,
         protected array $namesAndAddresses = [],
         protected array $dates = [],
@@ -83,6 +86,11 @@ abstract class Point
     public function getComments(): ?string
     {
         return $this->comments;
+    }
+
+    public function getType(): INOVERTMessageType
+    {
+        return $this->type;
     }
 
     abstract public function setProductClass($productClass): self;
