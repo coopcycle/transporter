@@ -7,12 +7,12 @@ use Transporter\Parser\TransporterParser;
 use Transporter\Transporters\DBSchenker\DTO\DBSchenkerPoint;
 use Transporter\Transporters\DBSchenker\Enum\DBSchenkerProductClass;
 
-class DBSchenkerScontrParser extends TransporterParser
+class DBSchenkerPickupParser extends TransporterParser
 {
     protected function parseTask(array $task): DBSchenkerPoint
     {
         $point = new DBSchenkerPoint(
-            type: INOVERTMessageType::SCONTR,
+            type: INOVERTMessageType::PICKUP,
             id: self::getID($task),
             namesAndAddresses: self::getNamesAndAddresses($task['GR8']),
             dates: self::getDates($task['GR8']),
@@ -20,24 +20,7 @@ class DBSchenkerScontrParser extends TransporterParser
             packages: self::getPackages($task),
             comments: self::getComments($task)
         );
-        $point->setProductClass(self::getProductClass($task));
+        $point->setProductClass(DBSchenkerProductClass::UNKNOWN);
         return $point;
-    }
-
-
-    /**
-     * @param array $message
-     * @return DBSchenkerProductClass
-     */
-    private static function getProductClass(array $message): DBSchenkerProductClass
-    {
-        if (isset($message['productType'])) {
-            return DBSchenkerProductClass::from(
-                $message['productType']['regime'],
-                $message['productType']['productType']
-            );
-        } else {
-            return DBSchenkerProductClass::UNKNOWN;
-        }
     }
 }

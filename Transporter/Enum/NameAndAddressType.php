@@ -10,4 +10,8 @@ enum NameAndAddressType: string
     case PARTICIPANT2 = "N2";
     case DELIVERY_AGENT = "DP";
     case PROVIDER = "FW";
+    case FORWARDER = "IC";
+    case CONTRACTOR = "PP";
+    case COLLEGUE = "MR";
+    case COLLECT = "PW";
 }

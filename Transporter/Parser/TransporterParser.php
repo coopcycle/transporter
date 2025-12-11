@@ -15,14 +15,16 @@ use Transporter\Enum\ProductType;
 use Transporter\Enum\QuantityType;
 use Transporter\Enum\QuantityUnitType;
 use Transporter\Interface\TransporterParserInterface;
-use Transporter\Utils\AddressGeocoder;
 
 abstract class TransporterParser implements TransporterParserInterface
 {
 
     protected array $scontr;
 
-    protected ?AddressGeocoder $addressGeocoder = null;
+    public function __construct(
+        protected string $taskGroup = 'GR7'
+    )
+    { }
 
     public function parse(array $message): void
     {
@@ -37,21 +39,16 @@ abstract class TransporterParser implements TransporterParserInterface
 
     public function getTasks(): array
     {
-        return array_reduce($this->scontr['GR7'], function ($acc, $v) {
-            $acc[] = $this->gr7ed($v);
+        return array_reduce($this->scontr[$this->taskGroup], function ($acc, $v) {
+            $acc[] = $this->parseTask($v);
             return $acc;
         }, []);
     }
 
     /**
-     * @param AddressGeocoder|null $addressGeocoder
+     * @param array<int,mixed> $task
      */
-    public function setAddressGeocoder(?AddressGeocoder $addressGeocoder): void
-    {
-        $this->addressGeocoder = $addressGeocoder;
-    }
-
-    abstract protected function gr7ed(array $gr7): Point;
+    abstract protected function parseTask(array $task): Point;
 
     /**
      * Parse RFF segment
@@ -107,15 +104,14 @@ abstract class TransporterParser implements TransporterParserInterface
     /**
      * Parse NAD segment
      *
-     * @param array $message
-     * @param AddressGeocoder|null $geocode
+     * @param array $group
      * @return NameAndAddress[]
      */
-    protected static function getNamesAndAddresses(array $message, ?AddressGeocoder $geocode = null): array
+    protected static function getNamesAndAddresses(array $group): array
     {
 
         //TODO: Handle Group1 NAD segment
-        return array_reduce($message['GR8'], function ($acc, $nad) use (&$geocode) {
+        return array_reduce($group, function ($acc, $nad) {
             $ret = new NameAndAddress();
             $ret->setType(NameAndAddressType::from($nad['nameAndAddress']['quality']));
 
@@ -136,14 +132,6 @@ abstract class TransporterParser implements TransporterParserInterface
             // Set address
             $ret->setAddress($address);
 
-            // Apply geocode if needed
-            if ($geocode instanceof AddressGeocoder) {
-                $res = $geocode->geocode($ret->getAddress());
-                if ($res) {
-                    $ret->setLatitude($res['latitude'])->setLongitude($res['longitude']);
-                }
-            }
-
             // Parse communication means
             if (isset($nad['communicationMeans'])) {
                 $ret->setContactName(
@@ -161,13 +149,13 @@ abstract class TransporterParser implements TransporterParserInterface
     }
 
     /**
-     * @param array $message
+     * @param array $group
      * @return Date[]
      */
-    protected static function getDates(array $message): array
+    protected static function getDates(array $group): array
     {
 
-        return array_reduce($message['GR8'], function ($acc, $date) {
+        return array_reduce($group, function ($acc, $date) {
             if (isset($date['Date'])) {
 
                 if (isset($date['Date']['event']) && isset($date['Date']['date'])) {
