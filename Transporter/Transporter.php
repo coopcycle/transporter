@@ -32,8 +32,8 @@ class Transporter
     ): array
     {
 
-        if (is_null($transporter)) {
-            $transporter = self::tryGuessMessageType($inovert);
+        if (is_null($messageType)) {
+            $messageType = self::tryGuessMessageType($inovert);
         }
 
         $parser = new Parser($inovert);
