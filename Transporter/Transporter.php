@@ -31,6 +31,11 @@ class Transporter
         TransporterName $transporter
     ): array
     {
+
+        if (is_null($transporter)) {
+            $transporter = self::tryGuessMessageType($inovert);
+        }
+
         $parser = new Parser($inovert);
         $parsed = $parser->get();
 
@@ -49,10 +54,6 @@ class Transporter
 
         if (count($prep) == 0) {
             throw new TransporterException('No messages found');
-        }
-
-        if (is_null($transporter)) {
-            $transporter = self::tryGuessMessageType($inovert);
         }
 
         return array_reduce($prep, function ($acc, $v) use ($transporter, $messageType) {
