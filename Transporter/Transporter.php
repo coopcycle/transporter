@@ -20,15 +20,15 @@ class Transporter
      * Parse INOVERT file or string
      *
      * @param string $inovert
-     * @param INOVERTMessageType $messageType
+     * @param ?INOVERTMessageType $messageType
      * @param TransporterName $transporter
      * @return TransporterParserInterface[]
      * @throws TransporterException
      */
     public static function parse(
         string $inovert,
-        INOVERTMessageType $messageType = INOVERTMessageType::SCONTR,
-        ?TransporterName $transporter = null
+        ?INOVERTMessageType $messageType = null,
+        TransporterName $transporter
     ): array
     {
         $parser = new Parser($inovert);
