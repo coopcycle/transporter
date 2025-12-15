@@ -28,7 +28,7 @@ class Transporter
     public static function parse(
         string $inovert,
         INOVERTMessageType $messageType = INOVERTMessageType::SCONTR,
-        TransporterName $transporter = TransporterName::DBSCHENKER
+        ?TransporterName $transporter = null
     ): array
     {
         $parser = new Parser($inovert);
@@ -51,16 +51,30 @@ class Transporter
             throw new TransporterException('No messages found');
         }
 
+        if (is_null($transporter)) {
+            $transporter = self::tryGuessMessageType($inovert);
+        }
+
         return array_reduce($prep, function ($acc, $v) use ($transporter, $messageType) {
             $implParser = match ([$transporter, $messageType]) {
                 [TransporterName::DBSCHENKER, INOVERTMessageType::SCONTR] => new DBSchenkerScontrParser(),
                 [TransporterName::BMV, INOVERTMessageType::SCONTR] => new BMVScontrParser(),
-        [TransporterName::DB_SCHENKER, INOVERTMessageType::PICKUP] => new DBSchenkerPickupParser(),
+                [TransporterName::DBSCHENKER, INOVERTMessageType::PICKUP] => new DBSchenkerPickupParser(),
                 default => throw new TransporterException(sprintf("Unsupported message type: %s for transporter: %s", $messageType->value, $transporter->value)),
             };
             $implParser->parse($v);
             $acc[] = $implParser;
             return $acc;
         }, []);
+    }
+
+    private function tryGuessMessageType(string $inovert): INOVERTMessageType
+    {
+        preg_match("/^UNH\+.+?(?P<type>PICKUP|SCONTR).+?'$/m", $inovert, $matches);
+        try {
+            return INOVERTMessageType::from(strtolower($matches['type']));
+        } catch (\Exception $e) {
+            throw new TransporterException('Unable to guess message type');
+        }
     }
 }
