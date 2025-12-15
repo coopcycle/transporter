@@ -45,7 +45,7 @@ abstract class Point
     {
 
         if (!is_null($type)) {
-            return array_filter($this->namesAndAddresses, fn($nameAndAddress) => $nameAndAddress->getType() === $type);
+            return array_values(array_filter($this->namesAndAddresses, fn($nameAndAddress) => $nameAndAddress->getType() === $type));
         }
 
         return $this->namesAndAddresses;
@@ -59,7 +59,7 @@ abstract class Point
     {
 
         if (!is_null($type)) {
-            return array_filter($this->dates, fn($date) => $date->getEvent() === $type);
+            return array_values(array_filter($this->dates, fn($date) => $date->getEvent() === $type));
         }
         return $this->dates;
     }
