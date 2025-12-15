@@ -69,7 +69,7 @@ class Transporter
         }, []);
     }
 
-    private function tryGuessMessageType(string $inovert): INOVERTMessageType
+    private static function tryGuessMessageType(string $inovert): INOVERTMessageType
     {
         preg_match("/^UNH\+.+?(?P<type>PICKUP|SCONTR).+?'$/m", $inovert, $matches);
         try {
