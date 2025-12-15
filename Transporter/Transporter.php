@@ -71,7 +71,7 @@ class Transporter
 
     private static function tryGuessMessageType(string $inovert): INOVERTMessageType
     {
-        preg_match("/^UNH\+.+?(?P<type>PICKUP|SCONTR).+?'$/m", $inovert, $matches);
+        preg_match("/UNH\+.+?(?P<type>PICKUP|SCONTR).+?'/m", $inovert, $matches);
         try {
             return INOVERTMessageType::from(strtolower($matches['type']));
         } catch (\Exception $e) {
