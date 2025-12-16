@@ -20,15 +20,15 @@ class Transporter
      * Parse INOVERT file or string
      *
      * @param string $inovert
-     * @param ?INOVERTMessageType $messageType
      * @param TransporterName $transporter
-     * @return TransporterParserInterface[]
+     * @param ?INOVERTMessageType $messageType
+     * @return [INOVERTMessageType, TransporterParserInterface[]]
      * @throws TransporterException
      */
     public static function parse(
         string $inovert,
+        TransporterName $transporter,
         ?INOVERTMessageType $messageType = null,
-        TransporterName $transporter
     ): array
     {
 
@@ -56,7 +56,7 @@ class Transporter
             throw new TransporterException('No messages found');
         }
 
-        return array_reduce($prep, function ($acc, $v) use ($transporter, $messageType) {
+        $tasks = array_reduce($prep, function ($acc, $v) use ($transporter, $messageType) {
             $implParser = match ([$transporter, $messageType]) {
                 [TransporterName::DBSCHENKER, INOVERTMessageType::SCONTR] => new DBSchenkerScontrParser(),
                 [TransporterName::BMV, INOVERTMessageType::SCONTR] => new BMVScontrParser(),
@@ -67,6 +67,8 @@ class Transporter
             $acc[] = $implParser;
             return $acc;
         }, []);
+
+        return [$messageType, $tasks];
     }
 
     private static function tryGuessMessageType(string $inovert): INOVERTMessageType
