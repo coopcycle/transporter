@@ -208,7 +208,16 @@ abstract class TransporterParser implements TransporterParserInterface
      * @return CommunicationMean[]
      */
     protected static function getCommunicationMeans(array $contactMeans): array {
+        $means = array_filter($contactMeans, fn($v, $k) => !in_array($k, ['contact', 'communicationType'], true), ARRAY_FILTER_USE_BOTH);
+        $means = array_values($means);
+
         return array_values(array_filter(array_map(function ($contact) {
+            if (is_array($contact)) {
+                $contact = $contact[0] ?? null;
+            }
+            if ($contact === null || !is_string($contact)) {
+                return null;
+            }
             if (self::isPhone($contact)) {
                 $contact = str_replace(['.', ' ', '-', '_', '/'], '', $contact);
                 return new CommunicationMean(CommunicationMeanType::PHONE, $contact);
@@ -219,8 +228,7 @@ abstract class TransporterParser implements TransporterParserInterface
             }
 
             return null;
-        }, array_map(function($v) { return $v[0]; },
-            array_slice($contactMeans, 5)))));
+        }, $means)));
     }
 
     /**
@@ -229,6 +237,7 @@ abstract class TransporterParser implements TransporterParserInterface
      */
     protected static function isPhone(string $phone): bool
     {
-        return preg_match('/^\d{2}.?\d{2}.?\d{2}.?\d{2}.?\d{2}$/', $phone) === 1;
+        $cleaned = preg_replace('/[\s\.\-_\/]/', '', $phone);
+        return preg_match('/^\+?\d{6,20}$/', $cleaned) === 1;
     }
 }
