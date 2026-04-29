@@ -8,4 +8,6 @@ enum QuantityUnitType: string
     case METER_CUBE = "MTQ";
     case LITER = "LTR";
     case CENTILITER = "CTL";
+    // Unknown values
+    case LM = "LM";
 }

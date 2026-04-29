@@ -12,4 +12,6 @@ enum QuantityType: string
     case NET_WEIGHT = "AAC";
     case QUANTITY_EXCEPTION = "EQ";
     case QUANTITY_LIMIT = "LQ";
+    // Unknown values
+    case LMT = "LMT";
 }
