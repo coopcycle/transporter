@@ -77,7 +77,7 @@ abstract class TransporterParser implements TransporterParserInterface
         return array_reduce($packages, function ($acc, $v) {
             $acc[] = new Package(
                 type: ProductType::from(intval($v['unit'])),
-                quantity: intval($v['quantity'])
+                quantity: self::parseEuropeanNumber($v['quantity'])
             );
             return $acc;
         }, []);
@@ -95,10 +95,20 @@ abstract class TransporterParser implements TransporterParserInterface
         return array_map(function($mes){
             return new Mesurement(
                 type: QuantityType::from($mes['quantityType']),
-                quantity: intval($mes['quantity']['quantity']),
+                quantity: self::parseEuropeanNumber($mes['quantity']['quantity']),
                 unit: QuantityUnitType::from($mes['quantity']['unit'])
             );
         }, normalize_depth($message['measurement']));
+    }
+
+    /**
+     * Parse a quantity string in European decimal format (e.g. "16,000" or
+     * "00000000472,000") to an int. Replaces the comma decimal separator with
+     * a dot, then truncates to int.
+     */
+    protected static function parseEuropeanNumber(string $value): int
+    {
+        return intval(floatval(str_replace(',', '.', $value)));
     }
 
     /**
@@ -193,14 +203,15 @@ abstract class TransporterParser implements TransporterParserInterface
      */
     protected static function getComments($message): ?string
     {
-        if (
-            !isset($message['text'])
-            || !isset($message['text']['text'])
-        ) {
+        if (!isset($message['text'])) {
             return null;
         }
-        //TODO: Handle multiple comments
-        return $message['text']['text'];
+        $texts = is_array($message['text']) && isset($message['text']['text'])
+            ? [$message['text']['text']]
+            : array_column($message['text'], 'text');
+
+        $texts = array_values(array_filter($texts, fn($t) => is_string($t) && $t !== ''));
+        return empty($texts) ? null : implode(' ', $texts);
     }
 
     /**

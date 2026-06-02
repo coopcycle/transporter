@@ -10,6 +10,9 @@ use Transporter\Transporters\DBSchenker\Generator\DBSchenkerReportGenerator;
 use Transporter\Transporters\BMV\BMVSync;
 use Transporter\Transporters\BMV\Generator\BMVInterchange;
 use Transporter\Transporters\BMV\Generator\BMVReportGenerator;
+use Transporter\Transporters\TELIAE\TaliaeSync;
+use Transporter\Transporters\TELIAE\Generator\TaliaeInterchange;
+use Transporter\Transporters\TELIAE\Generator\TaliaeReportGenerator;
 
 
 /**
@@ -31,7 +34,12 @@ class TransporterImpl {
             'sync' => BMVSync::class,
             'reportGenerator' => BMVReportGenerator::class,
             'interchange' => BMVInterchange::class
-        ]
+        ],
+        'TELIAE' => [
+            'sync'            => TaliaeSync::class,
+            'reportGenerator' => TaliaeReportGenerator::class,
+            'interchange'     => TaliaeInterchange::class,
+        ],
     ];
 
     public function __construct(

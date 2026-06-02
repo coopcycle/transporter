@@ -6,4 +6,5 @@ enum INOVERTMessageType: string
 {
     case SCONTR = 'scontr';
     case PICKUP = 'pickup';
+    case DISPOR = 'dispor';
 }

@@ -6,4 +6,5 @@ enum TransporterName: string {
     case DBSCHENKER = 'DBSCHENKER';
     case BMV = 'BMV';
     case HEPPNER = 'HEPPNER';
+    case TELIAE = 'TELIAE';
 }

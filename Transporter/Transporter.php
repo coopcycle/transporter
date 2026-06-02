@@ -12,6 +12,7 @@ use Transporter\Interface\TransporterParserInterface;
 use Transporter\Transporters\DBSchenker\Parser\DBSchenkerPickupParser;
 use Transporter\Transporters\DBSchenker\Parser\DBSchenkerScontrParser;
 use Transporter\Transporters\BMV\Parser\BMVScontrParser;
+use Transporter\Transporters\TELIAE\Parser\TaliaeDisporParser;
 
 class Transporter
 {
@@ -61,6 +62,7 @@ class Transporter
                 [TransporterName::DBSCHENKER, INOVERTMessageType::SCONTR] => new DBSchenkerScontrParser(),
                 [TransporterName::BMV, INOVERTMessageType::SCONTR] => new BMVScontrParser(),
                 [TransporterName::DBSCHENKER, INOVERTMessageType::PICKUP] => new DBSchenkerPickupParser(),
+                [TransporterName::TELIAE, INOVERTMessageType::DISPOR] => new TaliaeDisporParser(),
                 default => throw new TransporterException(sprintf("Unsupported message type: %s for transporter: %s", $messageType->value, $transporter->value)),
             };
             $implParser->parse($v);
@@ -73,7 +75,7 @@ class Transporter
 
     private static function tryGuessMessageType(string $inovert): INOVERTMessageType
     {
-        preg_match("/UNH\+.+?(?P<type>PICKUP|SCONTR).+?'/m", $inovert, $matches);
+        preg_match("/UNH\+.+?(?P<type>PICKUP|SCONTR|DISPOR).+?'/m", $inovert, $matches);
         try {
             return INOVERTMessageType::from(strtolower($matches['type']));
         } catch (\Exception $e) {

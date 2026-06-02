@@ -6,6 +6,7 @@ enum NameAndAddressType: string
 {
     case RECIPIENT = "CN";
     case SENDER = "CO";
+    case ORIGIN_SHIPPER = "OS";
     case PARTICIPANT = "N1";
     case PARTICIPANT2 = "N2";
     case DELIVERY_AGENT = "DP";
