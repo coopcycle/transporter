@@ -22,7 +22,7 @@ class EDIFACTReportGenerator implements ReportGeneratorInterface
     protected ?\DateTime $appointment = null;
 
     public function __construct(
-        private readonly TransporterOptions $options
+        protected readonly TransporterOptions $options
     ) { }
 
     public function setDocID(string $docID): ReportGeneratorInterface
