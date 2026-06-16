@@ -4,11 +4,14 @@ namespace Transporter\Transporters\TELIAE;
 
 use Transporter\Interface\TransporterSync;
 use Transporter\TransporterOptions;
+use Transporter\Utils\PathTemplate;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\StorageAttributes;
 
 class TaliaeSync implements TransporterSync {
+
+    private const DEFAULT_PUSH_PATH = 'from_{filemask}/{filemask}.{{date(\'YmdHis\')}}_{{uniqid()}}';
 
     private array $unflushed = [];
 
@@ -58,17 +61,11 @@ class TaliaeSync implements TransporterSync {
      */
     public function push(string $message, array $options = []): void
     {
-        $fs = $this->options->getOutFilesystem();
-        $options = [
-            'filemask' => $fs->filemask,
-            ...$options
-        ];
-        $path = sprintf("from_%s/%s.%s_%s",
-            $fs->filemask, $fs->filemask,
-            date('YmdHis'), uniqid()
-        );
-        $fs->getFilesystem()->write(sprintf("%s.tmp", $path), $message);
-        $fs->getFilesystem()->move(sprintf("%s.tmp", $path), $path);
+        $fs   = $this->options->getOutFilesystem();
+        $tpl  = is_null($fs->getPushPath()) ? self::DEFAULT_PUSH_PATH : $fs->getPushPath();
+        $path = PathTemplate::resolve($tpl, $fs);
+
+        $fs->getFilesystem()->write($path, $message);
     }
 
 }
