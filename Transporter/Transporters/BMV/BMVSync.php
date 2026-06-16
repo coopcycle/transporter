@@ -12,6 +12,7 @@ use League\Flysystem\StorageAttributes;
 class BMVSync implements TransporterSync {
 
     private const DEFAULT_PUSH_PATH = 'REPORT.{{date(\'YmdHis\')}}_{{uniqid()}}.edi';
+    private const DEFAULT_PULL_PATH = '/';
 
     private array $unflushed = [];
 
@@ -26,12 +27,15 @@ class BMVSync implements TransporterSync {
      */
     public function pull(array $options = []): array
     {
-        $fs = $this->options->getInFilesystem();
+        $fs   = $this->options->getInFilesystem();
+        $tpl  = $fs->getPullPath() ?? self::DEFAULT_PULL_PATH;
+        $root = PathTemplate::resolve($tpl, $fs);
+
         $this->unflushed = $fs->getFilesystem()
-            ->listContents('/')
+            ->listContents(empty($root) ? '/' : $root)
             ->filter(fn (StorageAttributes $attributes) => $attributes->isFile())
             ->filter(fn (FileAttributes $attrs) =>
-               !str_ends_with($attrs->path(), '.tmp') | $attrs->fileSize() > 0
+               !str_ends_with($attrs->path(), '.tmp') || $attrs->fileSize() > 0
             )
             ->toArray();
 
@@ -62,7 +66,7 @@ class BMVSync implements TransporterSync {
     public function push(string $message, array $options = []): void
     {
         $fs   = $this->options->getOutFilesystem();
-        $tpl  = is_null($fs->getPushPath()) ? self::DEFAULT_PUSH_PATH : $fs->getPushPath();
+        $tpl  = $fs->getPushPath() ?? self::DEFAULT_PUSH_PATH;
         $path = PathTemplate::resolve($tpl, $fs);
 
         $fs->getFilesystem()->write(sprintf('%s.tmp', $path), $message);

@@ -14,6 +14,7 @@ class TransporterSyncOptions
         private readonly Filesystem $filesystem,
         private readonly array      $attributes = [],
         private readonly ?string    $pushPath   = null,
+        private readonly ?string    $pullPath   = null,
     ) { }
 
     /**
@@ -38,6 +39,14 @@ class TransporterSyncOptions
     public function getPushPath(): ?string
     {
         return $this->pushPath;
+    }
+
+    /**
+     * @return ?string
+     */
+    public function getPullPath(): ?string
+    {
+        return $this->pullPath;
     }
 
     public function __get(string $name)
