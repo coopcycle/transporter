@@ -77,7 +77,7 @@ abstract class TransporterParser implements TransporterParserInterface
         return array_reduce($packages, function ($acc, $v) {
             $acc[] = new Package(
                 type: ProductType::from(intval($v['unit'])),
-                quantity: self::parseEuropeanNumber($v['quantity'])
+                quantity: (int) self::parseEuropeanNumber($v['quantity'])
             );
             return $acc;
         }, []);
@@ -103,12 +103,12 @@ abstract class TransporterParser implements TransporterParserInterface
 
     /**
      * Parse a quantity string in European decimal format (e.g. "16,000" or
-     * "00000000472,000") to an int. Replaces the comma decimal separator with
-     * a dot, then truncates to int.
+     * "00000000472,000") to a float by replacing the comma decimal separator
+     * with a dot.
      */
-    protected static function parseEuropeanNumber(string $value): int
+    protected static function parseEuropeanNumber(string $value): float
     {
-        return intval(floatval(str_replace(',', '.', $value)));
+        return floatval(str_replace(',', '.', $value));
     }
 
     /**

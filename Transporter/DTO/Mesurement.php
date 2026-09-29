@@ -10,16 +10,16 @@ final class Mesurement
 
     private QuantityType $type;
 
-    private int $quantity;
+    private float $quantity;
 
     private QuantityUnitType $unit;
 
     /**
      * @param QuantityType $type
-     * @param int $quantity
+     * @param float $quantity
      * @param QuantityUnitType $unit
      */
-    public function __construct(QuantityType $type, int $quantity, QuantityUnitType $unit)
+    public function __construct(QuantityType $type, float $quantity, QuantityUnitType $unit)
     {
         $this->type = $type;
         $this->quantity = $quantity;
@@ -35,9 +35,9 @@ final class Mesurement
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getQuantity(): int
+    public function getQuantity(): float
     {
         return $this->quantity;
     }
