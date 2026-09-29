@@ -3,8 +3,10 @@
 namespace Transporter\Parser;
 
 use Transporter\DTO\CommunicationMean;
+use Transporter\DTO\DangerousGoods;
 use Transporter\DTO\Date;
 use Transporter\DTO\Document;
+use Transporter\DTO\Goods;
 use Transporter\DTO\Mesurement;
 use Transporter\DTO\NameAndAddress;
 use Transporter\DTO\Package;
@@ -71,7 +73,7 @@ abstract class TransporterParser implements TransporterParserInterface
      */
     protected static function getPackages(array $message): array
     {
-        //TODO: Handle Group9 and Group10 MSE segments
+        //TODO: Handle Group10 MSE segments
         $packages = array_filter($message['productGroup'], function ($v, $k) {
             return str_starts_with($k, 'quantity') && is_array($v);
         }, ARRAY_FILTER_USE_BOTH);
@@ -93,7 +95,7 @@ abstract class TransporterParser implements TransporterParserInterface
      */
     protected static function getMesurements(array $message): array
     {
-        //TODO: Handle Group9 and Group10 MSE segments
+        //TODO: Handle Group10 MSE segments
         return array_map(function($mes){
             return new Mesurement(
                 type: QuantityType::from($mes['quantityType']),
@@ -136,6 +138,50 @@ abstract class TransporterParser implements TransporterParserInterface
                 origin: self::nullIfEmpty($doc[5] ?? null)
             );
         }, normalize_depth($message['GR12']));
+    }
+
+    /**
+     * Parse GR9 goods description and dangerous goods
+     *
+     * @param array $message
+     * @return Goods[]
+     */
+    protected static function getGoods(array $message): array
+    {
+        if (!isset($message['GR9'])) {
+            return [];
+        }
+
+        return array_map(function ($group) {
+            $dangerousGoods = null;
+            if (isset($group['dangerousGoods'])) {
+                $dgs = $group['dangerousGoods'];
+                $texts = [];
+                foreach (normalize_depth($group['text'] ?? []) as $text) {
+                    $texts[$text['textType']] = self::nullIfEmpty($text['text'] ?? null);
+                }
+
+                $dangerousGoods = new DangerousGoods(
+                    regulation: $dgs['code'],
+                    class: self::nullIfEmpty($dgs['hazardousMaterialCode'] ?? null),
+                    unNumber: self::nullIfEmpty($dgs['UNDGID'] ?? null),
+                    packingGroup: self::nullIfEmpty($dgs['packagingType'] ?? null),
+                    labels: array_values(array_filter(array_map(
+                        fn($i) => self::nullIfEmpty($dgs['hazardousMaterialMarking' . $i] ?? null),
+                        [1, 2, 3, 4]
+                    ))),
+                    officialName: $texts['AAD'] ?? null,
+                    technicalName: $texts['AAC'] ?? null,
+                    tunnelCode: $texts['REG'] ?? null
+                );
+            }
+
+            return new Goods(
+                description: self::nullIfEmpty($group['goodsDescription']['description'] ?? null),
+                dangerousGoods: $dangerousGoods,
+                mesurements: isset($group['measurement']) ? self::getMesurements($group) : []
+            );
+        }, normalize_depth($message['GR9']));
     }
 
     protected static function nullIfEmpty($value): ?string

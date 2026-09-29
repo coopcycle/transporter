@@ -19,7 +19,8 @@ class DBSchenkerPickupParser extends TransporterParser
             mesurements: self::getMesurements($task),
             packages: self::getPackages($task),
             comments: self::getComments($task),
-            documents: self::getDocuments($task)
+            documents: self::getDocuments($task),
+            goods: self::getGoods($task)
         );
         $point->setProductClass(DBSchenkerProductClass::UNKNOWN);
         return $point;

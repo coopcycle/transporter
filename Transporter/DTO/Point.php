@@ -19,6 +19,7 @@ abstract class Point
      * @param Package[] $packages
      * @param string|null $comments
      * @param Document[] $documents
+     * @param Goods[] $goods
      */
     public function __construct(
         protected INOVERTMessageType $type,
@@ -28,7 +29,8 @@ abstract class Point
         protected array $mesurements = [],
         protected array $packages = [],
         protected ?string $comments = null,
-        protected array $documents = []
+        protected array $documents = [],
+        protected array $goods = []
     )
     { }
 
@@ -102,6 +104,14 @@ abstract class Point
             return array_values(array_filter($this->documents, fn($document) => $document->getType() === $type));
         }
         return $this->documents;
+    }
+
+    /**
+     * @return Goods[]
+     */
+    public function getGoods(): array
+    {
+        return $this->goods;
     }
 
     public function getType(): INOVERTMessageType
