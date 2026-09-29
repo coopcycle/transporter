@@ -13,6 +13,7 @@ interface ReportGeneratorInterface
     public function setReference(string $reference): ReportGeneratorInterface;
     public function setReceipt(string $receipt): ReportGeneratorInterface;
     public function setComment(?string $comment): ReportGeneratorInterface;
+    public function setContactName(?string $contactName): ReportGeneratorInterface;
     /**
      * @param array<string> $pods
      */

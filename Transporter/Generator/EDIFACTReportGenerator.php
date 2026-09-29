@@ -15,6 +15,7 @@ class EDIFACTReportGenerator implements ReportGeneratorInterface
     protected string $reference;
     protected string $receipt;
     protected ?string $comment = null;
+    protected ?string $contactName = null;
     protected array $pods = [];
     protected ReportSituation $situation;
     protected ReportReason $reason;
@@ -46,6 +47,18 @@ class EDIFACTReportGenerator implements ReportGeneratorInterface
     public function setComment(?string $comment): ReportGeneratorInterface
     {
         $this->comment = $comment;
+        return $this;
+    }
+
+    /**
+     * Name of the person or service responsible for the event, sent in CTA
+     * (e.g. the recipient signing the receipt)
+     * @param string|null $contactName
+     * @return $this
+     */
+    public function setContactName(?string $contactName): ReportGeneratorInterface
+    {
+        $this->contactName = $contactName;
         return $this;
     }
 
@@ -112,6 +125,7 @@ class EDIFACTReportGenerator implements ReportGeneratorInterface
             ->setReason($this->situation->name, $this->reason->name)
             ->setReceipt($this->receipt)
             ->setComment($this->comment)
+            ->setContact($this->contactName)
             ->setPOD($this->pods);
 
         if (!is_null($this->dsj)) {

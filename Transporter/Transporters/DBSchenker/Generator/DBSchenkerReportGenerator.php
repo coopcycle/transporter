@@ -16,6 +16,7 @@ class DBSchenkerReportGenerator extends EDIFACTReportGenerator
             ->setReference($this->reference)
             ->setReason($this->situation->name, $this->reason->name)
             ->setComment($this->comment)
+            ->setContact($this->contactName)
             ->setPOD($this->pods);
 
         if (!is_null($this->dsj)) {
