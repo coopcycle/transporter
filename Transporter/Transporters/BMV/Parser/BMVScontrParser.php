@@ -18,7 +18,8 @@ class BMVScontrParser extends TransporterParser
             dates: self::getDates($task['GR8']),
             mesurements: self::getMesurements($task),
             packages: self::getPackages($task),
-            comments: self::getComments($task)
+            comments: self::getComments($task),
+            documents: self::getDocuments($task)
         );
         $point->setProductClass(self::getProductClass($task));
         return $point;

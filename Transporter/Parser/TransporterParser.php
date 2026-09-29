@@ -4,12 +4,14 @@ namespace Transporter\Parser;
 
 use Transporter\DTO\CommunicationMean;
 use Transporter\DTO\Date;
+use Transporter\DTO\Document;
 use Transporter\DTO\Mesurement;
 use Transporter\DTO\NameAndAddress;
 use Transporter\DTO\Package;
 use Transporter\DTO\Point;
 use Transporter\Enum\CommunicationMeanType;
 use Transporter\Enum\DateEventType;
+use Transporter\Enum\DocumentType;
 use Transporter\Enum\NameAndAddressType;
 use Transporter\Enum\ProductType;
 use Transporter\Enum\QuantityType;
@@ -99,6 +101,50 @@ abstract class TransporterParser implements TransporterParserInterface
                 unit: QuantityUnitType::from($mes['quantity']['unit'])
             );
         }, normalize_depth($message['measurement']));
+    }
+
+    /**
+     * Parse GR12 DOC segments
+     *
+     * @param array $message
+     * @return Document[]
+     */
+    protected static function getDocuments(array $message): array
+    {
+        if (!isset($message['GR12'])) {
+            return [];
+        }
+
+        return array_map(function ($group) {
+            // The INOVERT mapping flattens the C002 composite (1001:1131:1000)
+            // into three data elements, so every name after `code` is shifted.
+            // Read the elements by position instead:
+            // C002, 3153, 1220, 1791, 1004, 1788
+            $doc = array_values(array_diff_key(
+                $group['document'],
+                array_flip(['segmentIdx', 'segmentCode', 'segmentGroup'])
+            ));
+            $composite = is_array($doc[0]) ? $doc[0] : [$doc[0]];
+            $code = trim($composite[0]);
+
+            return new Document(
+                type: DocumentType::fromCode($code),
+                code: $code,
+                number: self::nullIfEmpty($doc[4] ?? null),
+                name: self::nullIfEmpty($composite[2] ?? null),
+                state: self::nullIfEmpty($doc[3] ?? null),
+                origin: self::nullIfEmpty($doc[5] ?? null)
+            );
+        }, normalize_depth($message['GR12']));
+    }
+
+    protected static function nullIfEmpty($value): ?string
+    {
+        if (!is_string($value)) {
+            return null;
+        }
+        $value = trim($value);
+        return $value === '' ? null : $value;
     }
 
     /**

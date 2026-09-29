@@ -17,7 +17,8 @@ class TaliaeDisporParser extends TransporterParser
             dates: array_merge(self::getDates($task['GR8']), self::getDates($this->scontr['GR1'])),
             mesurements: self::getMesurements($task),
             packages: self::getPackages($task),
-            comments: self::getComments($task)
+            comments: self::getComments($task),
+            documents: self::getDocuments($task)
         );
         return $point;
     }

@@ -3,6 +3,7 @@
 namespace Transporter\DTO;
 
 use Transporter\Enum\DateEventType;
+use Transporter\Enum\DocumentType;
 use Transporter\Enum\INOVERTMessageType;
 use Transporter\Enum\NameAndAddressType;
 
@@ -17,6 +18,7 @@ abstract class Point
      * @param Mesurement[] $mesurements
      * @param Package[] $packages
      * @param string|null $comments
+     * @param Document[] $documents
      */
     public function __construct(
         protected INOVERTMessageType $type,
@@ -25,7 +27,8 @@ abstract class Point
         protected array $dates = [],
         protected array $mesurements = [],
         protected array $packages = [],
-        protected ?string $comments = null
+        protected ?string $comments = null,
+        protected array $documents = []
     )
     { }
 
@@ -86,6 +89,19 @@ abstract class Point
     public function getComments(): ?string
     {
         return $this->comments;
+    }
+
+    /**
+     * @param DocumentType|null $type
+     * @return Document[]
+     */
+    public function getDocuments(?DocumentType $type = null): array
+    {
+
+        if (!is_null($type)) {
+            return array_values(array_filter($this->documents, fn($document) => $document->getType() === $type));
+        }
+        return $this->documents;
     }
 
     public function getType(): INOVERTMessageType
