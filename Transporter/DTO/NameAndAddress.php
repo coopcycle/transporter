@@ -11,6 +11,10 @@ final class NameAndAddress
     private ?string $contactName = null;
     private ?string $contactSiret = null;
     private ?string $address = null;
+    private ?string $street = null;
+    private ?string $city = null;
+    private ?string $postalCode = null;
+    private ?string $countryCode = null;
     private ?float $latitude = null;
     private ?float $longitude = null;
 
@@ -103,6 +107,82 @@ final class NameAndAddress
     public function setAddress(?string $address): NameAndAddress
     {
         $this->address = $address;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStreet(): ?string
+    {
+        return $this->street;
+    }
+
+    /**
+     * @param string|null $street
+     * @return NameAndAddress
+     */
+    public function setStreet(?string $street): NameAndAddress
+    {
+        $this->street = $street;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param string|null $city
+     * @return NameAndAddress
+     */
+    public function setCity(?string $city): NameAndAddress
+    {
+        $this->city = $city;
+        return $this;
+    }
+
+    /**
+     * Often only the département ("75"), not a full postal code.
+     *
+     * @return string|null
+     */
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    /**
+     * @param string|null $postalCode
+     * @return NameAndAddress
+     */
+    public function setPostalCode(?string $postalCode): NameAndAddress
+    {
+        $this->postalCode = $postalCode;
+        return $this;
+    }
+
+    /**
+     * ISO 3166-1 alpha-2
+     *
+     * @return string|null
+     */
+    public function getCountryCode(): ?string
+    {
+        return $this->countryCode;
+    }
+
+    /**
+     * @param string|null $countryCode
+     * @return NameAndAddress
+     */
+    public function setCountryCode(?string $countryCode): NameAndAddress
+    {
+        $this->countryCode = $countryCode;
         return $this;
     }
 

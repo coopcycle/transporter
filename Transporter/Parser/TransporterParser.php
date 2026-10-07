@@ -194,6 +194,20 @@ abstract class TransporterParser implements TransporterParserInterface
     }
 
     /**
+     * Join a data element that can come as a string or as an array
+     * (composite, or a value containing the component separator).
+     */
+    protected static function joinValues($value): ?string
+    {
+        $values = [];
+        $value = (array) $value;
+        array_walk_recursive($value, function ($v) use (&$values) {
+            $values[] = trim($v);
+        });
+        return self::nullIfEmpty(join(" ", array_filter($values)));
+    }
+
+    /**
      * Parse a quantity string in European decimal format (e.g. "16,000" or
      * "00000000472,000") to a float by replacing the comma decimal separator
      * with a dot.
@@ -223,16 +237,18 @@ abstract class TransporterParser implements TransporterParserInterface
                 $ret->setAddressLabel($nad['nameAndAddress']['emmetName']);
             }
 
-            //print_r(array_merge([], ...array_values(array_slice($nad['nameAndAddress'], 4))));
-            //TODO: Enjoy the ugly hack
-            $address = [];
-            $data = array_values(array_slice($nad['nameAndAddress'], 7));
-            array_walk_recursive($data, function ($v) use (&$address) {
-                $address[] = trim($v);
-            });
-            $address = join(" ", array_filter($address));
-            // Set address
-            $ret->setAddress($address);
+            $ret->setStreet(self::joinValues($nad['nameAndAddress']['streets'] ?? null));
+            $ret->setCity(self::joinValues($nad['nameAndAddress']['city'] ?? null));
+            $ret->setPostalCode(self::joinValues($nad['nameAndAddress']['zipcode'] ?? null));
+            $ret->setCountryCode(self::joinValues($nad['nameAndAddress']['country'] ?? null));
+
+            // Without the country code: geocoders match it as a word
+            // and can pick the wrong street.
+            $ret->setAddress(join(" ", array_filter([
+                $ret->getStreet(),
+                $ret->getCity(),
+                $ret->getPostalCode(),
+            ])));
 
             // Parse communication means
             if (isset($nad['communicationMeans'])) {
