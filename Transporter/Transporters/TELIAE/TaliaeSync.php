@@ -3,7 +3,9 @@
 namespace Transporter\Transporters\TELIAE;
 
 use Transporter\Interface\TransporterSync;
+use Transporter\TransporterException;
 use Transporter\TransporterOptions;
+use Transporter\Utils\FailedFolder;
 use Transporter\Utils\PathTemplate;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemException;
@@ -29,9 +31,29 @@ class TaliaeSync implements TransporterSync {
     {
         $fs   = $this->options->getInFilesystem();
         $tpl  = $fs->getPullPath() ?? self::DEFAULT_PULL_PATH;
-        $root = PathTemplate::resolve($tpl, $fs);
 
-        $this->unflushed = $fs->getFilesystem()
+        return $this->pullFrom(PathTemplate::resolve($tpl, $fs));
+    }
+
+    /**
+     * @return array<string,string>
+     * @throws FilesystemException
+     * @throws TransporterException
+     */
+    public function pullFailed(): array
+    {
+        return $this->pullFrom(FailedFolder::root($this->options->getInFilesystem()));
+    }
+
+    /**
+     * @return array<string,string>
+     * @throws FilesystemException
+     */
+    private function pullFrom(string $root): array
+    {
+        $fs = $this->options->getInFilesystem();
+
+        $files = $fs->getFilesystem()
             ->listContents(empty($root) ? '/' : $root)
             ->filter(fn (StorageAttributes $attributes) => $attributes->isFile())
             ->filter(fn (FileAttributes $attrs) =>
@@ -39,19 +61,29 @@ class TaliaeSync implements TransporterSync {
             )
             ->toArray();
 
-        return array_map(fn ($file) => $fs->getFilesystem()->read($file->path()), $this->unflushed);
+        // Keyed by path, so flush() knows which ones were rejected
+        $this->unflushed = [];
+        foreach ($files as $file) {
+            $this->unflushed[$file->path()] = $file;
+        }
+
+        return array_map(fn (FileAttributes $file) => $fs->getFilesystem()->read($file->path()), $this->unflushed);
     }
 
     /**
      * @param bool $dry_run
+     * @param array<string,string> $rejected
      * @return void
      * @throws FilesystemException
+     * @throws TransporterException
      */
-    public function flush(bool $dry_run = false): void
+    public function flush(bool $dry_run = false, array $rejected = []): void
     {
         $fs = $this->options->getInFilesystem();
         if (!$dry_run) {
-            array_walk($this->unflushed, fn ($file) => $fs->getFilesystem()->delete($file->path()));
+            $acknowledged = array_diff_key($this->unflushed, $rejected);
+            array_walk($acknowledged, fn (FileAttributes $file) => $fs->getFilesystem()->delete($file->path()));
+            FailedFolder::moveTo(array_intersect_key($this->unflushed, $rejected), $fs);
         }
         $this->unflushed = [];
     }

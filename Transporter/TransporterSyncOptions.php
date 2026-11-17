@@ -15,6 +15,7 @@ class TransporterSyncOptions
         private readonly array      $attributes = [],
         private readonly ?string    $pushPath   = null,
         private readonly ?string    $pullPath   = null,
+        private readonly ?string    $failedPath = null,
     ) { }
 
     /**
@@ -47,6 +48,15 @@ class TransporterSyncOptions
     public function getPullPath(): ?string
     {
         return $this->pullPath;
+    }
+
+    /**
+     * Where the files that couldn't be imported are moved to. When null, they stay where they were pulled from.
+     * @return ?string
+     */
+    public function getFailedPath(): ?string
+    {
+        return $this->failedPath;
     }
 
     public function __get(string $name)
