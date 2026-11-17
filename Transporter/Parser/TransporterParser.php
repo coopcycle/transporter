@@ -100,7 +100,7 @@ abstract class TransporterParser implements TransporterParserInterface
             return new Mesurement(
                 type: QuantityType::from($mes['quantityType']),
                 quantity: self::parseEuropeanNumber($mes['quantity']['quantity']),
-                unit: QuantityUnitType::from($mes['quantity']['unit'])
+                unit: QuantityUnitType::fromCode($mes['quantity']['unit'])
             );
         }, normalize_depth($message['measurement']));
     }

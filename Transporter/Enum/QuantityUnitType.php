@@ -10,4 +10,12 @@ enum QuantityUnitType: string
     case CENTILITER = "CTL";
     // Unknown values
     case LM = "LM";
+
+    public static function fromCode(string $code): self
+    {
+        return match (trim($code)) {
+            'KGM' => self::KILOGRAM,
+            default => self::from(trim($code)),
+        };
+    }
 }
